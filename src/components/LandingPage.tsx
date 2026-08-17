@@ -3,7 +3,6 @@ import { ArrowRight, BookOpen, Brain, FlaskConical, GitBranch, Layers, Search, S
 
 interface LandingPageProps {
   onSignIn: () => void;
-  onViewDemo: () => void;
 }
 
 const PIPELINE_NODES = [
@@ -33,7 +32,7 @@ const FEATURES = [
   { icon: Zap,          title: 'Live Real-Time Stream',    desc: 'Watch the entire multi-agent deliberation stream live over low-latency WebSockets.' },
 ];
 
-export function LandingPage({ onSignIn, onViewDemo }: LandingPageProps) {
+export function LandingPage({ onSignIn }: LandingPageProps) {
   return (
     <div
       className="landing-scroll"
@@ -122,15 +121,6 @@ export function LandingPage({ onSignIn, onViewDemo }: LandingPageProps) {
                 style={{ padding: '0.85rem 2.2rem', borderRadius: 999 }}
               >
                 Start Researching Free <ArrowRight size={15} />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={onViewDemo}
-                className="control-button text-sm font-semibold"
-                style={{ padding: '0.85rem 1.8rem', borderRadius: 999 }}
-              >
-                View Sample Paper <BookOpen size={15} />
               </motion.button>
             </div>
           </motion.div>
@@ -246,15 +236,6 @@ export function LandingPage({ onSignIn, onViewDemo }: LandingPageProps) {
               Generate your deep research paper in minutes. 5 free papers included per account.
             </p>
             <div className="flex gap-3 items-center justify-center">
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={onViewDemo}
-                className="control-button text-xs font-semibold"
-                style={{ padding: '0.75rem 1.8rem', borderRadius: 999 }}
-              >
-                View Sample <BookOpen size={14} />
-              </motion.button>
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}

@@ -57,7 +57,6 @@ export default function App() {
   const [actionError,       setActionError]      = useState<string | null>(null);
   const [rightTab,          setRightTab]         = useState<RightTab>('paper');
   const [paper,             setPaper]            = useState<any>(null);
-  const [isDemoMode,        setIsDemoMode]       = useState(false);
 
   const { isConnected, isPollingFallback, feedItems, isComplete, error, warning, sendStop, connect } = useWebSocket(currentSessionId);
   const effectiveComplete = isComplete || polledComplete || sessionDetail?.status === 'complete';
@@ -157,27 +156,6 @@ export default function App() {
     catch (err) { setActionError(err instanceof Error ? err.message : 'Cancel failed'); }
   };
 
-  const handleViewDemo = async () => {
-    try {
-      const demoPaper = await api.getDemoPaper();
-      setPaper(demoPaper);
-      setIsDemoMode(true);
-      setAppView('app');
-      setCurrentSessionId('demo');
-      setPolledComplete(true);
-    } catch (err) {
-      console.error('Failed to load demo paper:', err);
-    }
-  };
-
-  const handleBackFromDemo = () => {
-    setIsDemoMode(false);
-    setPaper(null);
-    setCurrentSessionId(null);
-    setPolledComplete(false);
-    setAppView(authSession ? 'app' : 'landing');
-  };
-
   // Polling
   useEffect(() => { setPolledComplete(false); }, [currentSessionId]);
 
@@ -217,7 +195,7 @@ export default function App() {
     );
   }
 
-  if (appView === 'landing') return <LandingPage onSignIn={() => setAppView('auth')} onViewDemo={handleViewDemo} />;
+  if (appView === 'landing') return <LandingPage onSignIn={() => setAppView('auth')} />;
   if (appView === 'auth' || !authSession) return <AuthScreen />;
 
   const viewMotion = reduceMotion
@@ -238,31 +216,14 @@ export default function App() {
   return (
     <div className="flex h-screen" style={{ background: 'var(--color-canvas)' }}>
 
-      {/* ── Demo Mode Banner ── */}
-      {isDemoMode && (
-        <div className="fixed top-0 left-0 right-0 z-50 py-2 px-4 text-center text-sm font-medium shadow-md"
-          style={{ background: 'var(--color-blue)', color: 'white' }}>
-          📄 Viewing Pre-Generated Demo Paper
-          <button
-            onClick={handleBackFromDemo}
-            className="ml-4 px-3 py-1 rounded-lg text-xs font-semibold hover:bg-white/30 transition-all"
-            style={{ background: 'rgba(255,255,255,0.2)' }}
-          >
-            Back to Dashboard
-          </button>
-        </div>
-      )}
-
       {/* ── Sidebar ── */}
-      {!isDemoMode && (
-        <aside className="hidden w-[270px] shrink-0 md:block">
-          <Sidebar
-            currentSessionId={currentSessionId}
-            onSelectSession={handleSelectSession}
-            onNewSession={handleNewSession}
-          />
-        </aside>
-      )}
+      <aside className="hidden w-[270px] shrink-0 md:block">
+        <Sidebar
+          currentSessionId={currentSessionId}
+          onSelectSession={handleSelectSession}
+          onNewSession={handleNewSession}
+        />
+      </aside>
 
       {/* ── Main Content Area ── */}
       <main className="flex min-w-0 flex-1 flex-col">

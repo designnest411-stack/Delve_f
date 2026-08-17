@@ -142,13 +142,4 @@ export const api = {
     if (!resp.ok) throw await parseApiError(resp, 'Failed to fetch quota information');
     return resp.json();
   },
-
-  /**
-   * Get demo paper (no authentication required).
-   */
-  async getDemoPaper() {
-    const resp = await fetch(`${API_BASE}/demo/paper`);
-    if (!resp.ok) throw await parseApiError(resp, 'Failed to load demo paper');
-    return resp.json();
-  },
 };
