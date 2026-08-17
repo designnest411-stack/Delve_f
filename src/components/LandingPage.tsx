@@ -28,8 +28,7 @@ const FEATURES = [
   { icon: FlaskConical, title: 'Proposer–Critic Debate',   desc: 'Two competing agents critique and refine drafts over multiple debate rounds.' },
   { icon: Shield,       title: 'Citation Verification',    desc: 'Validates DOIs, publication years, and evidence grounding to prevent hallucinations.' },
   { icon: Sparkles,     title: 'Research Gap Analysis',    desc: 'Discovers unexplored research opportunities with structured evidence mapping.' },
-  { icon: BookOpen,     title: 'Format Compliance',        desc: 'Built-in formatting for IEEE, APA, ACM, MLA, and academic publication standards.' },
-  { icon: Zap,          title: 'Live Real-Time Stream',    desc: 'Watch the entire multi-agent deliberation stream live over low-latency WebSockets.' },
+  { icon: Zap,          title: 'Live Real-Time Stream',    desc: 'Watch the entire multi-agent deliberation stream live in real time as agents debate and synthesize.' },
 ];
 
 export function LandingPage({ onSignIn }: LandingPageProps) {

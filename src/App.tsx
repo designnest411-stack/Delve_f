@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
-import { ArrowRight, BarChart2, Brain, ChevronDown, FileText, Plus, RotateCcw, Sparkles, Square } from 'lucide-react';
+import { ArrowRight, BarChart2, Brain, ChevronDown, FileText, Menu, Plus, RotateCcw, Sparkles, Square, X } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Sidebar }       from './components/Sidebar';
 import { ResearchFeed }  from './components/ResearchFeed';
@@ -57,6 +57,7 @@ export default function App() {
   const [actionError,       setActionError]      = useState<string | null>(null);
   const [rightTab,          setRightTab]         = useState<RightTab>('paper');
   const [paper,             setPaper]            = useState<any>(null);
+  const [mobileMenuOpen,    setMobileMenuOpen]   = useState(false);
 
   const { isConnected, isPollingFallback, feedItems, isComplete, error, warning, sendStop, connect } = useWebSocket(currentSessionId);
   const effectiveComplete = isComplete || polledComplete || sessionDetail?.status === 'complete';
@@ -216,7 +217,7 @@ export default function App() {
   return (
     <div className="flex h-screen" style={{ background: 'var(--color-canvas)' }}>
 
-      {/* ── Sidebar ── */}
+      {/* ── Desktop Sidebar ── */}
       <aside className="hidden w-[270px] shrink-0 md:block">
         <Sidebar
           currentSessionId={currentSessionId}
@@ -224,6 +225,60 @@ export default function App() {
           onNewSession={handleNewSession}
         />
       </aside>
+
+      {/* ── Mobile Sidebar Drawer ── */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden"
+            />
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 26, stiffness: 320 }}
+              className="fixed inset-y-0 left-0 z-50 w-[290px] shadow-2xl md:hidden flex flex-col"
+              style={{ background: 'var(--color-surface)', borderRight: '1px solid var(--color-line)' }}
+            >
+              <div className="flex items-center justify-between p-4 border-b shrink-0" style={{ borderColor: 'var(--color-line)' }}>
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg flex items-center justify-center shadow-md" style={{ background: 'var(--gradient-primary)' }}>
+                    <Brain size={15} color="white" />
+                  </div>
+                  <span className="font-bold text-sm" style={{ color: 'var(--color-ink)' }}>Delve Research</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-1.5 rounded-lg hover:bg-black/5 transition-colors"
+                  style={{ color: 'var(--color-ink-mute)' }}
+                  aria-label="Close menu"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+              <div className="flex-1 overflow-hidden">
+                <Sidebar
+                  currentSessionId={currentSessionId}
+                  onSelectSession={(id) => {
+                    handleSelectSession(id);
+                    setMobileMenuOpen(false);
+                  }}
+                  onNewSession={() => {
+                    handleNewSession();
+                    setMobileMenuOpen(false);
+                  }}
+                />
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* ── Main Content Area ── */}
       <main className="flex min-w-0 flex-1 flex-col">
@@ -238,15 +293,28 @@ export default function App() {
             borderRight: 0,
           }}
         >
-          <div className="mx-auto flex h-[62px] w-full max-w-[960px] items-center justify-between gap-4 px-6">
-            <div className="min-w-0">
-              <p className="mono-kicker text-[10px]">
-                {view === 'idle' ? 'New research' : view === 'running' ? 'In progress' : 'Paper ready'}
-              </p>
-              <p className="truncate text-sm font-semibold mt-0.5" style={{ color: 'var(--color-ink)' }}>
-                {view === 'idle' ? 'Multi-Agent Academic Deep Research' : activeTopic}
-              </p>
+          <div className="mx-auto flex h-[62px] w-full max-w-[960px] items-center justify-between gap-3 px-4 sm:px-6">
+            <div className="flex items-center gap-2.5 min-w-0">
+              {/* Mobile Hamburger Button */}
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(true)}
+                className="control-button p-2 md:hidden shrink-0"
+                aria-label="Open sessions menu"
+              >
+                <Menu size={16} />
+              </button>
+
+              <div className="min-w-0">
+                <p className="mono-kicker text-[10px]">
+                  {view === 'idle' ? 'New research' : view === 'running' ? 'In progress' : 'Paper ready'}
+                </p>
+                <p className="truncate text-sm font-semibold mt-0.5" style={{ color: 'var(--color-ink)' }}>
+                  {view === 'idle' ? 'Academic Deep Research' : activeTopic}
+                </p>
+              </div>
             </div>
+
             <div className="flex shrink-0 items-center gap-2">
               {/* Status badge */}
               <span
@@ -265,12 +333,12 @@ export default function App() {
 
               {view === 'running' && !isError && !isCancelled && (
                 <button type="button" onClick={handleCancel} className="control-button text-xs">
-                  <Square size={13} /> Stop
+                  <Square size={13} /> <span className="hidden sm:inline">Stop</span>
                 </button>
               )}
               {(isError || isCancelled) && currentSessionId && (
                 <button type="button" onClick={handleRetry} className="control-button control-button-primary text-xs">
-                  <RotateCcw size={13} /> Retry
+                  <RotateCcw size={13} /> <span className="hidden sm:inline">Retry</span>
                 </button>
               )}
               <button type="button" onClick={handleNewSession} className="control-button text-xs">
@@ -279,11 +347,11 @@ export default function App() {
             </div>
           </div>
 
-          {/* WS warning */}
+          {/* Connection warning */}
           {(isPollingFallback || warning) && (
-            <div className="px-4 py-1.5 text-center text-xs"
+            <div className="px-4 py-1 text-center text-xs"
               style={{ background: 'rgba(245,158,11,0.1)', color: 'var(--color-warn)', borderTop: '1px solid rgba(245,158,11,0.2)' }}>
-              {warning || 'Live updates unavailable — utilizing polling mode.'}
+              {warning || 'Live updates reconnecting — utilizing background polling.'}
             </div>
           )}
         </header>

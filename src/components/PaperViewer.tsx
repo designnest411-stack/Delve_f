@@ -163,13 +163,13 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
   }
 
   return (
-    <div id="paper-scroll-container" className="h-full overflow-y-auto px-6 py-8 relative">
+    <div id="paper-scroll-container" className="h-full overflow-y-auto px-4 sm:px-6 py-6 sm:py-8 relative">
       <div className="mx-auto max-w-[1160px]">
         {/* Header bar */}
         <motion.div 
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8 flex items-start justify-between gap-4 border-b pb-5" 
+          className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b pb-5" 
           style={{ borderColor: 'var(--color-line)' }}
         >
           <div>
@@ -186,13 +186,13 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
               </span>
             </div>
           </div>
-          <div className="flex shrink-0 gap-2">
+          <div className="flex shrink-0 gap-2 flex-wrap">
             <motion.button 
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="button" 
               onClick={handleCopy} 
-              className="control-button text-xs font-semibold"
+              className="control-button text-xs font-semibold flex-1 sm:flex-none justify-center"
             >
               {copied ? <Check className="h-3.5 w-3.5 text-ok" /> : <Copy className="h-3.5 w-3.5" />}
               {copied ? 'Copied to Clipboard' : 'Copy Markdown'}
@@ -202,7 +202,7 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
               whileTap={{ scale: 0.98 }}
               type="button" 
               onClick={handleDownloadPdf} 
-              className="control-button control-button-primary text-xs font-semibold"
+              className="control-button control-button-primary text-xs font-semibold flex-1 sm:flex-none justify-center"
             >
               <Download className="h-3.5 w-3.5" />
               {downloading ? 'Exporting PDF…' : 'Download PDF'}
@@ -211,13 +211,13 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
         </motion.div>
 
         {/* Paper Content & Table of Contents */}
-        <div className="grid gap-10 xl:grid-cols-[1fr_260px]">
+        <div className="grid gap-6 xl:gap-10 xl:grid-cols-[1fr_260px]">
           {/* Main Paper Article */}
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25 }}
-            className="card p-8 md:p-12 shadow-md"
+            className="card p-5 sm:p-8 md:p-12 shadow-md"
             style={{ background: 'var(--color-surface)' }}
           >
             <article className="paper-body mx-auto w-full">

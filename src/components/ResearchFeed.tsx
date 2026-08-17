@@ -247,19 +247,19 @@ export function ResearchFeed({
               {items.length} live events · Elapsed time: <strong style={{ color: 'var(--color-ink-soft)' }}>{formatElapsed(elapsedSec)}</strong>
             </p>
           </div>
-          <div className="card px-3.5 py-2 text-right shadow-sm">
+          <div className="card px-3.5 py-2 text-right shadow-sm shrink-0">
             <p className="mono-kicker text-[10px]">
-              {isComplete ? 'Finished' : isConnected ? 'Live WebSocket' : isPollingFallback ? 'Polling Mode' : 'Connecting'}
+              {isComplete ? 'Finished' : isConnected ? 'Live' : isPollingFallback ? 'Live (Polling)' : 'Connecting'}
             </p>
             {warning && <p className="mt-1 text-[11px]" style={{ color: 'var(--color-warn)' }}>{warning}</p>}
           </div>
         </motion.div>
 
         {/* Pipeline Progress Grid */}
-        <div className="grid gap-6 lg:grid-cols-[290px_1fr] items-start">
+        <div className="grid gap-4 lg:gap-6 lg:grid-cols-[290px_1fr] items-start">
           
           {/* Left: Pipeline Stages Card */}
-          <div className="card p-5 shadow-sm h-[calc(100vh-15rem)] max-h-[750px] min-h-[500px] flex flex-col overflow-hidden">
+          <div className="card p-4 sm:p-5 shadow-sm h-auto max-h-[260px] lg:h-[calc(100vh-15rem)] lg:max-h-[750px] lg:min-h-[500px] flex flex-col overflow-hidden">
             <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b shrink-0" style={{ borderColor: 'var(--color-line)' }}>
               <p className="mono-kicker text-[10px]">Pipeline Stages</p>
               <span className="badge badge-blue text-[10px]">{activeIndex + 1} / {PIPELINE_STAGES.length}</span>
@@ -320,7 +320,7 @@ export function ResearchFeed({
           </div>
 
           {/* Right: Live Stream Block Container */}
-          <div className="card p-5 shadow-sm h-[calc(100vh-15rem)] max-h-[750px] min-h-[500px] flex flex-col overflow-hidden">
+          <div className="card p-4 sm:p-5 shadow-sm h-[520px] lg:h-[calc(100vh-15rem)] lg:max-h-[750px] lg:min-h-[500px] flex flex-col overflow-hidden">
             <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b shrink-0" style={{ borderColor: 'var(--color-line)' }}>
               <div className="flex items-center gap-2">
                 <span className="mono-kicker text-[10px]">Deliberation Log</span>
