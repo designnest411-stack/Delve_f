@@ -86,7 +86,7 @@ export function SessionStats({ detail, paper }: SessionStatsProps) {
         </h2>
         <div className="flex items-center gap-2 mt-2 flex-wrap">
           {detail.status === 'complete' && (
-            <span className="badge badge-green">Verified Complete</span>
+            <span className="badge badge-green">Research Complete</span>
           )}
           {Boolean(detail.controls?.paper_format) && (
             <span className="badge badge-blue">{String(detail.controls!.paper_format).toUpperCase()} Format</span>
@@ -110,14 +110,14 @@ export function SessionStats({ detail, paper }: SessionStatsProps) {
           icon={Hash}
           label="LLM Tokens"
           value={tokenEstimate.toLocaleString()}
-          sub="Gemini Free Tier Engine"
+          sub="Gemini Model Engine"
           color="#ec4899"
         />
         <StatCard
           icon={Database}
           label="Academic Papers"
           value={totalSources}
-          sub={`from ${Object.keys(sourceCounts).length} repositories`}
+          sub={`from ${Object.keys(sourceCounts).length} research sources`}
           color="#818cf8"
         />
         <StatCard
@@ -201,7 +201,7 @@ export function SessionStats({ detail, paper }: SessionStatsProps) {
           </div>
           <div className="mt-5 pt-4 flex items-center justify-between border-t" style={{ borderColor: 'var(--color-line)' }}>
             <span className="text-xs font-medium" style={{ color: 'var(--color-ink-mute)' }}>
-              Overall Publication Score
+              Citation & Structural Checks
             </span>
             <span className="text-base font-bold gradient-text">
               {compliance.passed}/{compliance.total} structural checks passed
