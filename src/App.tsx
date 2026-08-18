@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
-import { ArrowRight, BarChart2, Brain, ChevronDown, FileText, Menu, Plus, RotateCcw, Sparkles, Square, X } from 'lucide-react';
+import { ArrowRight, BarChart2, Brain, FileText, Menu, Plus, RotateCcw, Sparkles, Square, X } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Sidebar }       from './components/Sidebar';
 import { ResearchFeed }  from './components/ResearchFeed';
@@ -52,7 +52,6 @@ export default function App() {
   const [polledComplete,    setPolledComplete]   = useState(false);
   const [paperFormat,       setPaperFormat]      = useState('ieee');
   const [depth,             setDepth]            = useState<Depth>('deep');
-  const [optionsOpen,       setOptionsOpen]      = useState(false);
   const [sessionDetail,     setSessionDetail]    = useState<SessionDetail | null>(null);
   const [actionError,       setActionError]      = useState<string | null>(null);
   const [rightTab,          setRightTab]         = useState<RightTab>('paper');
@@ -451,98 +450,75 @@ export default function App() {
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1, duration: 0.3 }}
-                    className="card overflow-hidden"
+                    className="card p-5 sm:p-6 space-y-6"
                   >
-                    <button
-                      type="button"
-                      onClick={() => setOptionsOpen((o) => !o)}
-                      className="flex w-full items-center justify-between px-6 py-4 text-left hover:bg-white/[0.02] transition-colors"
-                      aria-expanded={optionsOpen}
-                    >
-                      <span>
-                        <span className="mono-kicker block text-xs">Pipeline Configuration</span>
-                        <span className="mt-0.5 block text-xs" style={{ color: 'var(--color-ink-soft)' }}>
-                          {depth} depth · {paperFormat.toUpperCase()} citation format
-                        </span>
-                      </span>
-                      <ChevronDown
-                        size={16}
-                        color="var(--color-ink-mute)"
-                        style={{ transform: optionsOpen ? 'rotate(180deg)' : 'none', transition: 'transform 180ms ease' }}
-                      />
-                    </button>
+                    <div className="flex items-center justify-between border-b pb-3" style={{ borderColor: 'var(--color-line)' }}>
+                      <div>
+                        <h2 className="mono-kicker text-xs">Pipeline Configuration</h2>
+                        <p className="mt-0.5 text-xs font-semibold" style={{ color: 'var(--color-ink-soft)' }}>
+                          {depth.toUpperCase()} Mode · {paperFormat.toUpperCase()} Format
+                        </p>
+                      </div>
+                      <span className="badge badge-blue text-[11px]">Ready</span>
+                    </div>
 
-                    <AnimatePresence>
-                      {optionsOpen && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.18 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-6 pb-6 space-y-6" style={{ borderTop: '1px solid var(--color-line)' }}>
-                            {/* Depth Selection */}
-                            <div className="pt-4">
-                              <p className="mono-kicker mb-2.5 text-xs">Research Depth</p>
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                                {DEPTHS.map((item) => (
-                                  <button key={item.value} type="button" onClick={() => setDepth(item.value)}
-                                    className="rounded-xl border p-3 text-xs text-left transition-all"
-                                    style={depth === item.value ? {
-                                      background: 'rgba(99,102,241,0.12)',
-                                      borderColor: 'var(--color-blue)',
-                                      color: 'var(--color-ink)',
-                                      boxShadow: '0 0 0 1px var(--color-blue)',
-                                    } : {
-                                      background: 'var(--color-surface)',
-                                      borderColor: 'var(--color-line)',
-                                      color: 'var(--color-ink-soft)',
-                                    }}
-                                    aria-pressed={depth === item.value}>
-                                    <div className="font-semibold text-xs">{item.label}</div>
-                                    <div className="opacity-75 mt-1 text-[11px]">{item.desc}</div>
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
+                    {/* Depth Selection */}
+                    <div>
+                      <p className="mono-kicker mb-2.5 text-xs">Research Depth</p>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        {DEPTHS.map((item) => (
+                          <button key={item.value} type="button" onClick={() => setDepth(item.value)}
+                            className="rounded-xl border p-3 text-xs text-left transition-all"
+                            style={depth === item.value ? {
+                              background: 'rgba(99,102,241,0.12)',
+                              borderColor: 'var(--color-blue)',
+                              color: 'var(--color-ink)',
+                              boxShadow: '0 0 0 1px var(--color-blue)',
+                            } : {
+                              background: 'var(--color-surface)',
+                              borderColor: 'var(--color-line)',
+                              color: 'var(--color-ink-soft)',
+                            }}
+                            aria-pressed={depth === item.value}>
+                            <div className="font-semibold text-xs">{item.label}</div>
+                            <div className="opacity-75 mt-1 text-[11px]">{item.desc}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
 
-                            {/* Citation Format Selection */}
-                            <div>
-                              <p className="mono-kicker mb-2.5 text-xs">Citation & Paper Format</p>
-                              <div className="flex flex-wrap gap-2">
-                                {PAPER_FORMATS.map((item) => (
-                                  <button key={item.value} type="button" onClick={() => setPaperFormat(item.value)}
-                                    className="rounded-xl border px-3.5 py-2 text-xs font-semibold transition-all"
-                                    style={paperFormat === item.value ? {
-                                      background: 'rgba(236,72,153,0.12)',
-                                      borderColor: 'var(--color-pink)',
-                                      color: 'var(--color-pink-dim)',
-                                      boxShadow: '0 0 0 1px var(--color-pink)',
-                                    } : {
-                                      background: 'var(--color-surface)',
-                                      borderColor: 'var(--color-line)',
-                                      color: 'var(--color-ink-soft)',
-                                    }}
-                                    aria-pressed={paperFormat === item.value}>
-                                    {item.label}
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
+                    {/* Citation Format Selection */}
+                    <div>
+                      <p className="mono-kicker mb-2.5 text-xs">Citation & Paper Format</p>
+                      <div className="flex flex-wrap gap-2">
+                        {PAPER_FORMATS.map((item) => (
+                          <button key={item.value} type="button" onClick={() => setPaperFormat(item.value)}
+                            className="rounded-xl border px-3.5 py-2 text-xs font-semibold transition-all"
+                            style={paperFormat === item.value ? {
+                              background: 'rgba(236,72,153,0.12)',
+                              borderColor: 'var(--color-pink)',
+                              color: 'var(--color-pink-dim)',
+                              boxShadow: '0 0 0 1px var(--color-pink)',
+                            } : {
+                              background: 'var(--color-surface)',
+                              borderColor: 'var(--color-line)',
+                              color: 'var(--color-ink-soft)',
+                            }}
+                            aria-pressed={paperFormat === item.value}>
+                            {item.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
 
-                            {/* PDF Grounding */}
-                            <div>
-                              <div className="mb-2.5 flex items-center gap-2">
-                                <FileText size={14} color="var(--color-blue-dim)" />
-                                <p className="mono-kicker text-xs">Ground with Custom PDFs (Optional)</p>
-                              </div>
-                              <PdfUpload onFilesChange={setUploadedFileIds} />
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    {/* PDF Grounding */}
+                    <div>
+                      <div className="mb-2.5 flex items-center gap-2">
+                        <FileText size={14} color="var(--color-blue-dim)" />
+                        <p className="mono-kicker text-xs">Ground with Custom PDFs (Optional)</p>
+                      </div>
+                      <PdfUpload onFilesChange={setUploadedFileIds} />
+                    </div>
                   </motion.div>
                 </div>
               </motion.div>
