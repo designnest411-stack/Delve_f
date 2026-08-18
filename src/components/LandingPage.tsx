@@ -20,7 +20,7 @@ const STATS = [
   { value: '8', label: 'Autonomous Agents' },
   { value: '6', label: 'Research Sources' },
   { value: 'Automated', label: 'Citation Verification' },
-  { value: '5 Free', label: 'Lifetime Papers' },
+  { value: '5 Free', label: 'Research Papers' },
 ];
 
 const FEATURES = [
@@ -133,7 +133,7 @@ export function LandingPage({ onSignIn }: LandingPageProps) {
 
             <p className="text-sm sm:text-base md:text-lg mb-10 max-w-2xl mx-auto" style={{ color: 'var(--color-ink-soft)', lineHeight: 1.7 }}>
               Delve orchestrates 8 specialized AI agents to search academic sources,
-              synthesize literature, debate findings, discover research gaps, and generate structured research manuscript drafts.
+              synthesize evidence, challenge findings, discover research gaps, and generate structured research manuscripts.
             </p>
 
             <div className="flex items-center justify-center gap-4 flex-wrap">
