@@ -20,7 +20,7 @@ const STATS = [
   { value: '7', label: 'Autonomous Agents' },
   { value: '6', label: 'Academic Databases' },
   { value: '100%', label: 'Citation Verification' },
-  { value: '~15m', label: 'Avg Generation Time' },
+  { value: '~3–5m', label: 'Avg Generation Time' },
 ];
 
 const FEATURES = [
@@ -148,10 +148,10 @@ export function LandingPage({ onSignIn }: LandingPageProps) {
           <div className="text-center mb-12">
             <p className="mono-kicker mb-2 text-xs">Autonomous Architecture</p>
             <h2 className="text-3xl font-bold" style={{ color: 'var(--color-ink)' }}>
-              The 7-Agent Deliberation Pipeline
+              The 8-Phase Deliberation Pipeline
             </h2>
             <p className="mt-2 text-sm max-w-lg mx-auto" style={{ color: 'var(--color-ink-soft)' }}>
-              Each agent specializes in a distinct research phase, passing verified context through state graphs.
+              7 specialized AI agents orchestrate across 8 rigorous phases, passing verified context through state graphs.
             </p>
           </div>
 
