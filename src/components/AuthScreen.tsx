@@ -58,7 +58,7 @@ export function AuthScreen() {
       >
         <form
           onSubmit={submit}
-          className="card p-8 space-y-5 shadow-2xl"
+          className="card p-6 sm:p-8 space-y-5 shadow-2xl"
           style={{ background: 'var(--color-surface)', borderColor: 'var(--color-line)' }}
         >
           {/* Logo */}
@@ -116,6 +116,7 @@ export function AuthScreen() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2"
                 style={{ color: 'var(--color-ink-mute)' }}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>

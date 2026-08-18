@@ -189,7 +189,7 @@ export function Sidebar({ currentSessionId, onSelectSession, onNewSession }: Sid
                       type="button"
                       onClick={(e) => { e.stopPropagation(); handleDelete(session.session_id); }}
                       disabled={session.status === 'running' || deletingId === session.session_id}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-lg disabled:opacity-20 hover:bg-white/5"
+                      className="opacity-50 sm:opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-lg disabled:opacity-20 hover:bg-white/5"
                       style={{ color: 'var(--color-ink-mute)' }}
                       onMouseOver={(e) => (e.currentTarget.style.color = 'var(--color-err)')}
                       onMouseOut={(e) => (e.currentTarget.style.color = 'var(--color-ink-mute)')}

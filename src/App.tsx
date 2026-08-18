@@ -12,7 +12,7 @@ import { SessionStats }  from './components/SessionStats';
 import { useWebSocket }  from './hooks/useWebSocket';
 import { api }           from './api';
 import { supabase }      from './supabase';
-import type { SessionDetail } from './types';
+import type { SessionDetail, PaperResult } from './types';
 
 type AppView  = 'landing' | 'auth' | 'app';
 type WorkView = 'idle' | 'running' | 'done';
@@ -56,7 +56,7 @@ export default function App() {
   const [sessionDetail,     setSessionDetail]    = useState<SessionDetail | null>(null);
   const [actionError,       setActionError]      = useState<string | null>(null);
   const [rightTab,          setRightTab]         = useState<RightTab>('paper');
-  const [paper,             setPaper]            = useState<any>(null);
+  const [paper,             setPaper]            = useState<PaperResult | null>(null);
   const [mobileMenuOpen,    setMobileMenuOpen]   = useState(false);
 
   const { isConnected, isPollingFallback, feedItems, isComplete, error, warning, sendStop, connect } = useWebSocket(currentSessionId);
@@ -363,7 +363,7 @@ export default function App() {
             {/* ── IDLE: Topic Entry ── */}
             {view === 'idle' && (
               <motion.div key="idle" {...viewMotion} className="h-full overflow-y-auto">
-                <div className="mx-auto flex min-h-full max-w-[860px] flex-col justify-center px-6 py-12">
+                <div className="mx-auto flex min-h-full max-w-[860px] flex-col justify-center px-4 sm:px-6 py-8 sm:py-12">
 
                   {/* Hero heading */}
                   <motion.div
@@ -379,13 +379,13 @@ export default function App() {
                       </div>
                       <p className="mono-kicker">Delve Research Platform</p>
                     </div>
-                    <h1 className="max-w-[760px] text-4xl font-extrabold leading-tight md:text-5xl"
+                    <h1 className="max-w-[760px] text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight"
                       style={{ color: 'var(--color-ink)', letterSpacing: '-0.025em' }}>
                       Deep research,{' '}
                       <span className="gradient-text">7 specialized AI agents,</span>
                       {' '}automated.
                     </h1>
-                    <p className="mt-3 text-base max-w-[620px]" style={{ color: 'var(--color-ink-soft)', lineHeight: 1.6 }}>
+                    <p className="mt-3 text-sm sm:text-base max-w-[620px]" style={{ color: 'var(--color-ink-soft)', lineHeight: 1.6 }}>
                       Enter any academic research query. Delve will search databases, synthesize literature, debate rigor, and generate publication-ready papers.
                     </p>
                   </motion.div>
@@ -566,16 +566,16 @@ export default function App() {
             {view === 'done' && (
               <motion.div key="done" {...viewMotion} className="h-full flex flex-col overflow-hidden">
                 {/* Tab bar */}
-                <div className="shrink-0 flex items-center gap-2 px-6 pt-3 pb-0 bg-surface/50"
+                <div className="shrink-0 flex items-center gap-1 sm:gap-2 px-4 sm:px-6 pt-3 pb-0 bg-surface/50"
                   style={{ borderBottom: '1px solid var(--color-line)' }}>
                   {([
-                    { key: 'paper', label: 'Research Paper', icon: FileText },
-                    { key: 'stats', label: 'Verification Analytics', icon: BarChart2 },
-                  ] as const).map(({ key, label, icon: Icon }) => (
+                    { key: 'paper', label: 'Paper', fullLabel: 'Research Paper', icon: FileText },
+                    { key: 'stats', label: 'Analytics', fullLabel: 'Verification Analytics', icon: BarChart2 },
+                  ] as const).map(({ key, label, fullLabel, icon: Icon }) => (
                     <button
                       key={key}
                       onClick={() => setRightTab(key)}
-                      className="flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 -mb-px transition-all"
+                      className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold border-b-2 -mb-px transition-all"
                       style={rightTab === key ? {
                         borderBottomColor: 'var(--color-blue)',
                         color: 'var(--color-ink)',
@@ -585,7 +585,8 @@ export default function App() {
                       }}
                     >
                       <Icon size={14} color={rightTab === key ? 'var(--color-blue-dim)' : 'var(--color-ink-mute)'} />
-                      {label}
+                      <span className="hidden sm:inline">{fullLabel}</span>
+                      <span className="sm:hidden">{label}</span>
                     </button>
                   ))}
                 </div>
@@ -599,7 +600,7 @@ export default function App() {
                       </motion.div>
                     )}
                     {rightTab === 'stats' && sessionDetail && (
-                      <motion.div key="stats" {...viewMotion} className="h-full overflow-y-auto px-6 py-8">
+                      <motion.div key="stats" {...viewMotion} className="h-full overflow-y-auto px-4 sm:px-6 py-6 sm:py-8">
                         <div className="mx-auto max-w-[880px]">
                           <SessionStats detail={sessionDetail} paper={paper} />
                         </div>

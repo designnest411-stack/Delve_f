@@ -65,7 +65,7 @@ export function LandingPage({ onSignIn }: LandingPageProps) {
 
       <div className="relative" style={{ zIndex: 1 }}>
         {/* ── Navigation ── */}
-        <nav className="flex items-center justify-between px-8 py-6 max-w-6xl mx-auto">
+        <nav className="flex items-center justify-between px-4 sm:px-8 py-6 max-w-6xl mx-auto safe-top">
           <div className="flex items-center gap-2.5">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg"
@@ -85,7 +85,7 @@ export function LandingPage({ onSignIn }: LandingPageProps) {
         </nav>
 
         {/* ── Hero ── */}
-        <section className="text-center px-6 pt-16 pb-20 max-w-4xl mx-auto">
+        <section className="text-center px-4 sm:px-6 pt-12 sm:pt-16 pb-16 sm:pb-20 max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -99,14 +99,14 @@ export function LandingPage({ onSignIn }: LandingPageProps) {
               </span>
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-extrabold leading-[1.1] mb-6"
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] mb-6"
               style={{ color: 'var(--color-ink)', letterSpacing: '-0.03em' }}>
               Academic papers,{' '}
               <span className="gradient-text">researched & drafted</span>
               <br />by AI agents
             </h1>
 
-            <p className="text-base md:text-lg mb-10 max-w-2xl mx-auto" style={{ color: 'var(--color-ink-soft)', lineHeight: 1.7 }}>
+            <p className="text-sm sm:text-base md:text-lg mb-10 max-w-2xl mx-auto" style={{ color: 'var(--color-ink-soft)', lineHeight: 1.7 }}>
               Delve orchestrates 7 specialized AI agents to search academic repositories,
               synthesize literature, debate rigor, and compose publication-ready manuscripts.
             </p>
@@ -225,7 +225,7 @@ export function LandingPage({ onSignIn }: LandingPageProps) {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="card p-10 shadow-2xl"
+            className="card p-7 sm:p-10 shadow-2xl"
             style={{ background: 'var(--gradient-card)', borderColor: 'rgba(99,102,241,0.3)' }}
           >
             <h2 className="text-2xl font-bold mb-3" style={{ color: 'var(--color-ink)' }}>

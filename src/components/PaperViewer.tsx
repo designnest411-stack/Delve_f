@@ -9,7 +9,7 @@ import type { PaperResult } from '../types';
 interface PaperViewerProps {
   sessionId: string | null;
   isComplete: boolean;
-  paper?: any | null;
+  paper?: PaperResult | null;
 }
 
 function extractHeadings(markdown: string) {

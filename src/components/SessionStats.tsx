@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Activity, BookOpen, Clock, CheckCircle2, Database, FileText, Hash, Layers, ShieldCheck, Sparkles } from 'lucide-react';
 import type { SessionDetail, PaperResult } from '../types';

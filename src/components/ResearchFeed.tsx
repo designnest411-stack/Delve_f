@@ -225,22 +225,22 @@ export function ResearchFeed({
   }, [items.length, reduceMotion]);
 
   return (
-    <div className="h-full overflow-y-auto px-6 py-8">
+    <div className="h-full overflow-y-auto px-4 sm:px-6 py-6 sm:py-8">
       <div className="mx-auto max-w-[960px]">
 
         {/* Header summary */}
         <motion.div 
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8 flex items-start justify-between gap-4 border-b pb-6" 
+          className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b pb-5 sm:pb-6" 
           style={{ borderColor: 'var(--color-line)' }}
         >
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="mono-kicker">Autonomous Deliberation</span>
-              <span className="status-dot status-dot-running" />
+              {!isComplete && <span className="status-dot status-dot-running" />}
             </div>
-            <h1 className="text-2xl font-bold" style={{ color: 'var(--color-ink)' }}>
+            <h1 className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--color-ink)' }}>
               {isComplete ? 'Research Complete' : isError ? 'Needs Attention' : PIPELINE_STAGES[activeIndex]?.label || 'Researching'}
             </h1>
             <p className="mt-1 text-xs" style={{ color: 'var(--color-ink-mute)' }}>
@@ -320,7 +320,7 @@ export function ResearchFeed({
           </div>
 
           {/* Right: Live Stream Block Container */}
-          <div className="card p-4 sm:p-5 shadow-sm h-[520px] lg:h-[calc(100vh-15rem)] lg:max-h-[750px] lg:min-h-[500px] flex flex-col overflow-hidden">
+          <div className="card p-4 sm:p-5 shadow-sm h-[420px] sm:h-[520px] lg:h-[calc(100vh-15rem)] lg:max-h-[750px] lg:min-h-[500px] flex flex-col overflow-hidden">
             <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b shrink-0" style={{ borderColor: 'var(--color-line)' }}>
               <div className="flex items-center gap-2">
                 <span className="mono-kicker text-[10px]">Deliberation Log</span>
