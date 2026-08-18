@@ -381,11 +381,11 @@ export default function App() {
                     <h1 className="max-w-[760px] text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight"
                       style={{ color: 'var(--color-ink)', letterSpacing: '-0.025em' }}>
                       Deep research,{' '}
-                      <span className="gradient-text">7 specialized AI agents,</span>
+                      <span className="gradient-text">8 specialized AI agents,</span>
                       {' '}automated.
                     </h1>
                     <p className="mt-3 text-sm sm:text-base max-w-[620px]" style={{ color: 'var(--color-ink-soft)', lineHeight: 1.6 }}>
-                      Enter any academic research query. Delve will search databases, synthesize literature, debate rigor, and generate publication-ready papers.
+                      Enter any academic research query. Delve will search databases, synthesize literature, debate rigor, and generate structured research manuscripts.
                     </p>
                   </motion.div>
 
