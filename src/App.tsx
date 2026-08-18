@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
-import { ArrowRight, BarChart2, Brain, FileText, Menu, Plus, RotateCcw, Sparkles, Square, X } from 'lucide-react';
+import { ArrowRight, BarChart2, Brain, Database, FileText, Menu, Plus, RotateCcw, Sparkles, Square, X } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Sidebar }       from './components/Sidebar';
 import { ResearchFeed }  from './components/ResearchFeed';
 import { PaperViewer }   from './components/PaperViewer';
+import { SourceDossier } from './components/SourceDossier';
 import { PdfUpload }     from './components/PdfUpload';
 import { AuthScreen }    from './components/AuthScreen';
 import { LandingPage }   from './components/LandingPage';
@@ -16,7 +17,7 @@ import type { SessionDetail, PaperResult } from './types';
 
 type AppView  = 'landing' | 'auth' | 'app';
 type WorkView = 'idle' | 'running' | 'done';
-type RightTab = 'paper' | 'stats';
+type RightTab = 'paper' | 'sources' | 'stats';
 type Depth    = 'quick' | 'standard' | 'deep';
 
 const PAPER_FORMATS = [
@@ -546,7 +547,8 @@ export default function App() {
                   style={{ borderBottom: '1px solid var(--color-line)' }}>
                   {([
                     { key: 'paper', label: 'Paper', fullLabel: 'Research Paper', icon: FileText },
-                    { key: 'stats', label: 'Analytics', fullLabel: 'Verification Analytics', icon: BarChart2 },
+                    { key: 'sources', label: 'Sources', fullLabel: 'Retrieved Sources & Proof', icon: Database },
+                    { key: 'stats', label: 'Analytics', fullLabel: 'Session Analytics', icon: BarChart2 },
                   ] as const).map(({ key, label, fullLabel, icon: Icon }) => (
                     <button
                       key={key}
@@ -573,6 +575,11 @@ export default function App() {
                     {rightTab === 'paper' && (
                       <motion.div key="paper" {...viewMotion} className="h-full overflow-hidden">
                         <PaperViewer sessionId={currentSessionId} isComplete={effectiveComplete} paper={paper} />
+                      </motion.div>
+                    )}
+                    {rightTab === 'sources' && (
+                      <motion.div key="sources" {...viewMotion} className="h-full overflow-hidden">
+                        <SourceDossier paper={paper} detail={sessionDetail} />
                       </motion.div>
                     )}
                     {rightTab === 'stats' && sessionDetail && (
