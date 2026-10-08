@@ -120,7 +120,7 @@ export function Sidebar({ currentSessionId, onSelectSession, onNewSession }: Sid
               style={{ color: quota.has_quota ? 'var(--color-blue-dim)' : 'var(--color-err)' }}
             >
               {quota.unlimited
-                ? `${quota.papers_generated} ${quota.papers_generated === 1 ? 'paper' : 'papers'} · Unlimited`
+                ? `${sessions.length} ${sessions.length === 1 ? 'paper' : 'papers'} · Unlimited`
                 : `${quota.papers_remaining} free ${quota.papers_remaining === 1 ? 'paper' : 'papers'} left`}
             </span>
           </div>
