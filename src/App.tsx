@@ -29,9 +29,9 @@ const PAPER_FORMATS = [
 ] as const;
 
 const DEPTHS: Array<{ value: Depth; label: string; desc: string }> = [
-  { value: 'quick',    label: '⚡ Quick',    desc: '~1–2 min, 10 agent calls' },
-  { value: 'standard', label: '📚 Standard', desc: '~3–4 min, 16 agent calls' },
-  { value: 'deep',     label: '🔬 Deep',     desc: '~5–6 min, 24 agent calls' },
+  { value: 'quick',    label: '⚡ Quick',    desc: '~2–3 min, 10 agent calls' },
+  { value: 'standard', label: '📚 Standard', desc: '~4–6 min, 16 agent calls' },
+  { value: 'deep',     label: '🔬 Deep',     desc: '~7–10 min, 24 agent calls' },
 ];
 
 const EXAMPLE_TOPICS = [
