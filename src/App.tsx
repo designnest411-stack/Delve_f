@@ -168,7 +168,7 @@ export default function App() {
           if (status?.status === 'complete') setPolledComplete(true);
           setSessionDetail(detail);
         })
-        .catch((err) => setActionError(err instanceof Error ? err.message : 'Polling failed'));
+        .catch((err) => console.warn('Background polling check:', err));
     };
     poll();
     const interval = setInterval(() => {
