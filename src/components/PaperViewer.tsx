@@ -192,14 +192,13 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
     <div className="h-full flex flex-col overflow-hidden">
       {/* ── Top Bar: Metadata & Actions ── */}
       <div 
-        className="shrink-0 px-4 sm:px-8 py-3.5 bg-surface/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b"
-        style={{ borderColor: 'var(--color-line)' }}
+        className="shrink-0 px-4 sm:px-6 py-2.5 bg-surface flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-line"
       >
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5 flex-wrap">
           <span className="badge badge-blue">
-            {String(paper.paper_format || 'IEEE').toUpperCase()} Standard
+            {String(paper.paper_format || 'IEEE').toUpperCase()} Format
           </span>
-          <span className="badge badge-pink">
+          <span className="badge">
             {paper.verified_citations ?? paper.bibliography?.length ?? 0} Citations Verified
           </span>
           <span className="badge badge-green">
@@ -208,26 +207,22 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
         </div>
 
         <div className="flex shrink-0 gap-2 items-center">
-          <motion.button 
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+          <button 
             type="button" 
             onClick={handleCopy} 
-            className="control-button text-xs font-semibold"
+            className="control-button text-xs"
           >
             {copied ? <Check className="h-3.5 w-3.5 text-ok" /> : <Copy className="h-3.5 w-3.5" />}
             <span>{copied ? 'Copied' : 'Copy Markdown'}</span>
-          </motion.button>
-          <motion.button 
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+          </button>
+          <button 
             type="button" 
             onClick={handleDownloadPdf} 
-            className="control-button control-button-primary text-xs font-semibold"
+            className="control-button control-button-primary text-xs"
           >
             <Download className="h-3.5 w-3.5" />
             <span>{downloading ? 'Exporting PDF…' : 'Download PDF'}</span>
-          </motion.button>
+          </button>
         </div>
       </div>
 
@@ -236,11 +231,8 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
         {/* Manuscript Reader Scrollable Container */}
         <div id="paper-scroll-container" className="flex-1 overflow-y-auto px-4 sm:px-8 md:px-12 py-6 sm:py-8">
           <div className="mx-auto max-w-[880px]">
-            <motion.div
-              initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
-              className="card p-6 sm:p-10 md:p-14 shadow-lg"
+            <div
+              className="card p-6 sm:p-10 md:p-14"
               style={{ background: 'var(--color-surface)' }}
             >
               <article className="paper-body mx-auto w-full">
@@ -252,44 +244,44 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
                   {manuscript}
                 </ReactMarkdown>
               </article>
-            </motion.div>
+            </div>
           </div>
         </div>
 
         {/* Table of Contents Right Panel (Docked at the top right) */}
         {headings.length > 0 && (
           <aside
-            className="w-72 shrink-0 border-l overflow-hidden hidden xl:flex flex-col bg-surface/40"
-            style={{ borderColor: 'var(--color-line)' }}
+            className="w-64 shrink-0 border-l border-line overflow-hidden hidden xl:flex flex-col bg-surface"
           >
-            <div className="flex items-center justify-between gap-1.5 p-4 border-b shrink-0" style={{ borderColor: 'var(--color-line)' }}>
+            <div className="flex items-center justify-between gap-1.5 px-3 py-2.5 border-b border-line shrink-0">
               <div className="flex items-center gap-1.5">
-                <BookOpen size={13} color="var(--color-blue)" />
-                <p className="mono-kicker text-[10px]">Table of Contents</p>
+                <BookOpen size={12} className="text-ink-mute" />
+                <span className="mono-kicker text-[10px]">Sections</span>
               </div>
               <button
                 type="button"
                 onClick={scrollToTop}
-                className="text-[11px] font-semibold hover:underline flex items-center gap-0.5"
-                style={{ color: 'var(--color-blue)' }}
+                className="text-[11px] text-ink-mute hover:text-ink flex items-center gap-0.5"
               >
                 <ArrowUp size={10} /> Top
               </button>
             </div>
 
-            <nav className="p-3 space-y-1 flex-1 overflow-y-auto" aria-label="Table of Contents">
+            <nav className="p-2 space-y-0.5 flex-1 overflow-y-auto" aria-label="Table of Contents">
               {headings.map((h) => {
                 const isSelected = activeHeadingId === h.id;
                 return (
                   <button
                     key={h.id}
                     onClick={() => scrollToHeading(h.id)}
-                    className="block text-left text-xs leading-snug transition-all rounded-lg px-2.5 py-1.5 w-full truncate"
+                    className={`block text-left text-xs leading-snug rounded px-2 py-1.5 w-full truncate transition-colors ${
+                      isSelected
+                        ? 'bg-surface-subtle text-ink font-semibold'
+                        : 'text-ink-mute hover:text-ink hover:bg-surface-subtle'
+                    }`}
                     style={{
-                      paddingLeft: h.level === 2 ? '1rem' : h.level === 3 ? '1.5rem' : '0.5rem',
-                      color: isSelected ? 'var(--color-blue)' : 'var(--color-ink-soft)',
-                      background: isSelected ? 'rgba(79,70,229,0.09)' : 'transparent',
-                      fontWeight: h.level === 1 ? 700 : h.level === 2 ? 600 : 400,
+                      paddingLeft: h.level === 2 ? '0.85rem' : h.level === 3 ? '1.25rem' : '0.5rem',
+                      fontWeight: h.level === 1 ? 600 : h.level === 2 ? 500 : 400,
                     }}
                   >
                     {h.text}
