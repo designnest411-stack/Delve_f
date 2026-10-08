@@ -435,6 +435,111 @@
     border-radius: var(--radius-sm);
   }
 
+  /* ── Publication Format Previews ── */
+  .paper-layout-ieee {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: justify;
+  }
+  @media (min-width: 768px) {
+    .paper-layout-ieee {
+      column-count: 2;
+      column-gap: 2.25rem;
+    }
+  }
+  .paper-layout-ieee h1 {
+    column-span: all;
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .paper-layout-ieee h2 {
+    font-family: 'Times New Roman', Times, serif;
+    text-align: center;
+    font-variant: small-caps;
+    text-transform: uppercase;
+    font-size: 1rem;
+    border-top: none;
+    letter-spacing: 0.05em;
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  .paper-layout-acm {
+    font-family: 'Linux Libertine', 'Times New Roman', serif;
+    font-size: 13.5px;
+    line-height: 1.55;
+    text-align: justify;
+  }
+  @media (min-width: 768px) {
+    .paper-layout-acm {
+      column-count: 2;
+      column-gap: 2.25rem;
+    }
+  }
+  .paper-layout-acm h1 {
+    column-span: all;
+    font-family: var(--font-sans);
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+  .paper-layout-acm h2 {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-top: none;
+    margin: 1.25rem 0 0.4rem;
+  }
+
+  .paper-layout-apa {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 15px;
+    line-height: 1.8;
+    text-align: left;
+    max-width: 68ch;
+    margin: 0 auto;
+  }
+  .paper-layout-apa h1 {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  .paper-layout-apa h2 {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-top: none;
+    margin: 2rem 0 0.75rem;
+  }
+
+  .paper-layout-mla {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 15px;
+    line-height: 2.0;
+    text-align: left;
+    max-width: 68ch;
+    margin: 0 auto;
+  }
+  .paper-layout-mla h1 {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+  }
+  .paper-layout-mla h2 {
+    text-align: left;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    border-top: none;
+    margin: 1.75rem 0 0.5rem;
+  }
+
   /* ── Safe-area Utilities ── */
   .safe-top    { padding-top:    max(env(safe-area-inset-top,    0px), 0px); }
   .safe-bottom { padding-bottom: max(env(safe-area-inset-bottom, 0px), 0px); }

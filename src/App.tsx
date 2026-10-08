@@ -35,11 +35,17 @@ type RightTab = 'paper' | 'sources' | 'stats';
 type Depth    = 'quick' | 'standard' | 'deep';
 
 const PAPER_FORMATS = [
-  { value: 'ieee',     label: 'IEEE' },
-  { value: 'academic', label: 'Academic' },
-  { value: 'apa',      label: 'APA' },
-  { value: 'acm',      label: 'ACM' },
-  { value: 'mla',      label: 'MLA' },
+  { value: 'ieee', label: 'IEEE', desc: 'Two-Column Conference' },
+  { value: 'acm',  label: 'ACM',  desc: 'Two-Column Sigconf' },
+  { value: 'apa',  label: 'APA 7', desc: 'Single-Column Professional' },
+  { value: 'mla',  label: 'MLA 9', desc: 'Double-Spaced Academic' },
+] as const;
+
+const PAPER_TYPES = [
+  { value: 'experimental', label: 'Research Article' },
+  { value: 'survey',       label: 'Survey / Review' },
+  { value: 'system',       label: 'System Paper' },
+  { value: 'position',     label: 'Position Paper' },
 ] as const;
 
 const DEPTHS: Array<{ value: Depth; label: string; icon: typeof Zap; specs: string; est: string }> = [
@@ -66,6 +72,7 @@ export default function App() {
   const [uploadedFileIds,   setUploadedFileIds]  = useState<string[]>([]);
   const [polledComplete,    setPolledComplete]   = useState(false);
   const [paperFormat,       setPaperFormat]      = useState('ieee');
+  const [paperType,         setPaperType]        = useState('experimental');
   const [depth,             setDepth]            = useState<Depth>('deep');
   const [sessionDetail,     setSessionDetail]    = useState<SessionDetail | null>(null);
   const [actionError,       setActionError]      = useState<string | null>(null);
@@ -481,12 +488,12 @@ export default function App() {
                       </div>
                     </div>
 
-                    {/* Citation Format Selection */}
+                    {/* Manuscript Profile & Publication Style */}
                     <div>
                       <p className="block text-sm font-semibold text-ink mb-2">
-                        Manuscript Citation Standard
+                        Publication Standard & Profile
                       </p>
-                      <div className="flex flex-wrap gap-1.5">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                         {PAPER_FORMATS.map((item) => {
                           const selected = paperFormat === item.value;
                           return (
@@ -494,17 +501,56 @@ export default function App() {
                               key={item.value}
                               type="button"
                               onClick={() => setPaperFormat(item.value)}
-                              className={`rounded px-3.5 py-1.5 text-xs font-semibold transition-colors border ${
+                              className={`p-2.5 rounded-lg border text-left transition-colors ${
                                 selected
-                                  ? 'bg-ink text-white border-ink'
-                                  : 'bg-surface border-line text-ink-soft hover:bg-surface-subtle'
+                                  ? 'bg-surface border-ink shadow-sm ring-1 ring-ink'
+                                  : 'bg-surface border-line hover:border-line-dark'
                               }`}
                               aria-pressed={selected}
                             >
-                              {item.label}
+                              <div className="flex items-center justify-between">
+                                <span className="font-semibold text-xs text-ink">{item.label}</span>
+                                {selected && <span className="h-1.5 w-1.5 rounded-full bg-ink" />}
+                              </div>
+                              <div className="text-[11px] text-ink-mute mt-0.5">{item.desc}</div>
                             </button>
                           );
                         })}
+                      </div>
+
+                      {/* Paper Type Selector */}
+                      <div className="mt-3 flex items-center gap-2 flex-wrap">
+                        <span className="text-xs text-ink-mute font-medium">Type:</span>
+                        {PAPER_TYPES.map((pt) => {
+                          const active = paperType === pt.value;
+                          return (
+                            <button
+                              key={pt.value}
+                              type="button"
+                              onClick={() => setPaperType(pt.value)}
+                              className={`px-2.5 py-1 text-xs rounded transition-colors border ${
+                                active
+                                  ? 'bg-ink text-white border-ink font-medium'
+                                  : 'bg-surface border-line text-ink-soft hover:bg-surface-subtle'
+                              }`}
+                            >
+                              {pt.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Verification Badges */}
+                      <div className="mt-2.5 flex items-center gap-3 text-[11px] text-ink-mute flex-wrap">
+                        <span className="flex items-center gap-1">
+                          <span className="text-ok">✓</span> Professional Math Typesetting
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="text-ok">✓</span> CSL Citation Verification
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="text-ok">✓</span> Pre-Flight Document QA
+                        </span>
                       </div>
                     </div>
 
