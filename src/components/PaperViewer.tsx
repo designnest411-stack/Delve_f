@@ -3,10 +3,21 @@ import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
-import { Check, Copy, Download, FileText, BookOpen, FileCode, CheckCircle2 } from 'lucide-react';
+import {
+  Check,
+  Copy,
+  Download,
+  FileText,
+  BookOpen,
+  FileCode,
+  CheckCircle2,
+  PanelLeftClose,
+  PanelLeftOpen,
+  X,
+  ArrowUp
+} from 'lucide-react';
 import { api } from '../api';
 import type { PaperResult } from '../types';
-import { Figure1Architecture, Figure2Tradeoff } from './ScientificFigures';
 
 interface PaperViewerProps {
   sessionId: string | null;
@@ -23,20 +34,31 @@ const PUBLICATION_FORMATS: Array<{ id: PublicationFormat; label: string; desc: s
   { id: 'mla', label: 'MLA 9th', desc: 'Single-Column Double-Spaced' },
 ];
 
+function slugifyHeading(text: string): string {
+  return text
+    .trim()
+    .toLowerCase()
+    .replace(/<[^>]*>/g, '')
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .slice(0, 60);
+}
+
 function extractHeadings(markdown: string) {
   return markdown
     .split('\n')
     .map((line) => {
       const match = line.match(/^(#{1,3})\s+(.+)$/);
       if (!match) return null;
+      const rawText = match[2].trim().replace(/\*\*/g, '');
       return {
         level: match[1].length,
-        text: match[2].trim().replace(/\*\*/g, ''),
-        id: match[2].trim().toLowerCase().replace(/[^\w]+/g, '-'),
+        text: rawText,
+        id: slugifyHeading(rawText),
       };
     })
-    .filter((h): h is { level: number; text: string; id: string } => Boolean(h))
-    .slice(0, 24);
+    .filter((h): h is { level: number; text: string; id: string } => h !== null && Boolean(h.text))
+    .slice(0, 36);
 }
 
 export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperViewerProps) {
@@ -46,7 +68,9 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
   const [downloadingPdf, setDownloadingPdf] = useState(false);
   const [downloadingLatex, setDownloadingLatex] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeHeadingId, setActiveHeadingId] = useState<string>('');
+  const [activeHeadingId, setActiveHeadingId] = useState<string>('top');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileOutlineOpen, setMobileOutlineOpen] = useState(false);
 
   const [selectedFormat, setSelectedFormat] = useState<PublicationFormat>(() => {
     const raw = String(paperProp?.paper_format || 'ieee').toLowerCase();
@@ -76,6 +100,38 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
 
   const manuscript = paper?.final_draft || paper?.paper || '';
   const headings = useMemo(() => extractHeadings(manuscript), [manuscript]);
+
+  // Scroll spy to highlight active section as reader scrolls
+  useEffect(() => {
+    const container = document.getElementById('paper-scroll-container');
+    if (!container || headings.length === 0) return;
+
+    const handleScroll = () => {
+      if (container.scrollTop < 120) {
+        setActiveHeadingId('top');
+        return;
+      }
+      const containerTop = container.getBoundingClientRect().top;
+      let currentActive = headings[0]?.id || '';
+
+      for (const h of headings) {
+        const el = document.getElementById(h.id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top - containerTop <= 110) {
+          currentActive = h.id;
+        } else {
+          break;
+        }
+      }
+      if (currentActive) {
+        setActiveHeadingId(currentActive);
+      }
+    };
+
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [headings]);
 
   const handleCopy = async () => {
     if (!manuscript) return;
@@ -132,6 +188,14 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
     }
   };
 
+  const scrollToTop = () => {
+    setActiveHeadingId('top');
+    const container = document.getElementById('paper-scroll-container');
+    if (container) {
+      container.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   const scrollToHeading = (id: string) => {
     setActiveHeadingId(id);
     const el = document.getElementById(id);
@@ -143,32 +207,27 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
   const markdownComponents: Components = {
     h1({ children, ...props }) {
       const text = String(children).replace(/<[^>]*>/g, '');
-      const id = text.trim().toLowerCase().replace(/[^\w]+/g, '-');
+      const id = slugifyHeading(text);
       return <h1 id={id} {...props}>{children}</h1>;
     },
     h2({ children, ...props }) {
       const text = String(children).replace(/<[^>]*>/g, '');
-      const id = text.trim().toLowerCase().replace(/[^\w]+/g, '-');
-      const isArchSection = /algorithmic mechanics|architectural paradigms|theoretical framework/i.test(text);
+      const id = slugifyHeading(text);
       return (
         <div className="break-inside-avoid">
           <h2 id={id} {...props}>{children}</h2>
-          {isArchSection && <Figure1Architecture topic={paper?.topic} />}
         </div>
       );
     },
     h3({ children, ...props }) {
       const text = String(children).replace(/<[^>]*>/g, '');
-      const id = text.trim().toLowerCase().replace(/[^\w]+/g, '-');
+      const id = slugifyHeading(text);
       return <h3 id={id} className="break-inside-avoid" {...props}>{children}</h3>;
     },
     table({ children, ...props }) {
       return (
-        <div className="my-6 space-y-4 break-inside-avoid">
-          <div className="overflow-x-auto rounded border border-line bg-surface">
-            <table className="w-full text-xs" {...props}>{children}</table>
-          </div>
-          <Figure2Tradeoff />
+        <div className="my-6 overflow-x-auto rounded border border-line bg-surface p-1 shadow-xs break-inside-avoid">
+          <table className="w-full text-xs" {...props}>{children}</table>
         </div>
       );
     },
@@ -228,9 +287,36 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
     <div className="h-full flex flex-col overflow-hidden">
       {/* ── Top Bar: Format Switcher & Actions ── */}
       <div className="shrink-0 px-4 sm:px-6 py-2.5 bg-surface flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-line">
-        {/* Publication Format Selector */}
+        {/* Publication Format Selector & Toggle */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-semibold text-ink-mute uppercase tracking-wider mr-1">
+          {/* Outline Sidebar Toggle Button (Desktop) */}
+          {headings.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setSidebarOpen((prev) => !prev)}
+              className="control-button text-[13px] px-2.5 hidden md:inline-flex"
+              title={sidebarOpen ? 'Hide Section Outline' : 'Show Section Outline'}
+              aria-label="Toggle Outline"
+            >
+              {sidebarOpen ? <PanelLeftClose size={15} /> : <PanelLeftOpen size={15} />}
+              <span className="text-xs">{sidebarOpen ? 'Outline' : 'Outline'}</span>
+            </button>
+          )}
+
+          {/* Mobile Sections Drawer Button */}
+          {headings.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setMobileOutlineOpen(true)}
+              className="control-button text-[13px] px-2.5 md:hidden inline-flex"
+              title="Open Sections"
+            >
+              <BookOpen size={14} />
+              <span className="text-xs">Sections ({headings.length})</span>
+            </button>
+          )}
+
+          <span className="text-xs font-semibold text-ink-mute uppercase tracking-wider ml-1 mr-1">
             Format:
           </span>
           <div className="inline-flex rounded-lg border border-line p-0.5 bg-surface-subtle">
@@ -301,14 +387,85 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
         </div>
       </div>
 
-      {/* ── Main Manuscript Workspace ── */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Manuscript Reader Scrollable Container */}
+      {/* ── Main Manuscript Workspace (Outline on LEFT, Paper on RIGHT) ── */}
+      <div className="flex-1 flex overflow-hidden relative">
+        {/* Table of Contents / Outline Panel on the LEFT SIDE */}
+        {headings.length > 0 && sidebarOpen && (
+          <aside className="w-64 xl:w-72 shrink-0 border-r border-line overflow-hidden hidden md:flex flex-col bg-surface z-10 transition-all duration-150">
+            {/* Outline Header */}
+            <div className="flex items-center justify-between px-3.5 py-2.5 border-b border-line shrink-0 bg-surface">
+              <div className="flex items-center gap-2">
+                <BookOpen size={14} className="text-ink-mute" />
+                <span className="mono-kicker text-xs">Sections</span>
+                <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-surface-subtle text-ink-mute">
+                  {headings.length}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={scrollToTop}
+                className="text-[11px] text-ink-mute hover:text-ink hover:underline font-medium inline-flex items-center gap-1"
+                title="Jump to Top"
+              >
+                <span>Top</span>
+                <ArrowUp size={11} />
+              </button>
+            </div>
+
+            {/* Scrollable Navigation List */}
+            <nav className="flex-1 overflow-y-auto p-2 space-y-0.5 text-xs">
+              {/* Quick Jump to Document Top */}
+              <button
+                type="button"
+                onClick={scrollToTop}
+                className={`w-full text-left truncate rounded px-2.5 py-1.5 transition-colors font-semibold flex items-center justify-between ${
+                  activeHeadingId === 'top' || !activeHeadingId
+                    ? 'bg-surface-subtle text-ink border-l-2 border-ink'
+                    : 'text-ink-soft hover:text-ink hover:bg-surface-subtle'
+                }`}
+              >
+                <span className="truncate">Top (Title & Abstract)</span>
+              </button>
+
+              {/* Headings Hierarchy */}
+              {headings.map((h, idx) => {
+                const isActive = activeHeadingId === h.id;
+                return (
+                  <button
+                    key={`${h.id}-${idx}`}
+                    type="button"
+                    onClick={() => scrollToHeading(h.id)}
+                    title={h.text}
+                    className={`w-full text-left truncate rounded transition-colors block ${
+                      isActive
+                        ? 'bg-surface-subtle font-semibold text-ink border-l-2 border-ink'
+                        : 'text-ink-soft hover:text-ink hover:bg-surface-subtle'
+                    } ${
+                      h.level === 1
+                        ? 'py-1.5 text-xs font-semibold pl-2.5'
+                        : h.level === 2
+                        ? 'py-1 text-[11.5px] pl-4 text-ink-soft'
+                        : 'py-0.5 text-[11px] pl-6 text-ink-mute'
+                    }`}
+                  >
+                    <span className="truncate block">{h.text}</span>
+                  </button>
+                );
+              })}
+            </nav>
+
+            {/* Sidebar Footer */}
+            <div className="p-2.5 border-t border-line text-[11px] text-ink-mute flex items-center justify-between shrink-0 bg-surface-subtle">
+              <span className="font-mono uppercase">{selectedFormat.toUpperCase()} Mode</span>
+              <span>{paper.verified_citations ?? paper.bibliography?.length ?? 0} refs</span>
+            </div>
+          </aside>
+        )}
+
+        {/* Manuscript Reader Scrollable Container (RIGHT SIDE) */}
         <div id="paper-scroll-container" className="flex-1 overflow-y-auto px-4 sm:px-8 md:px-12 py-6 sm:py-8 bg-canvas">
           <div className="mx-auto max-w-[940px]">
-            <div
-              className="card p-6 sm:p-10 md:p-14 shadow-sm border border-line bg-surface"
-            >
+            <div className="card p-6 sm:p-10 md:p-14 shadow-sm border border-line bg-surface">
               {/* Format-Specific Live Decoration Header */}
               {selectedFormat === 'ieee' && (
                 <div className="mb-6 pb-4 border-b border-line text-center">
@@ -368,36 +525,75 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Table of Contents Right Panel */}
-        {headings.length > 0 && (
-          <aside className="w-64 shrink-0 border-l border-line overflow-hidden hidden xl:flex flex-col bg-surface">
-            <div className="flex items-center justify-between gap-1.5 px-3.5 py-2.5 border-b border-line shrink-0">
-              <div className="flex items-center gap-1.5">
-                <BookOpen size={13} className="text-ink-mute" />
-                <span className="mono-kicker text-xs">Section Navigation</span>
+      {/* ── Mobile Slide-Over Drawer for Sections ── */}
+      {mobileOutlineOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex" role="dialog" aria-modal="true">
+          <div
+            className="fixed inset-0 bg-black/40 backdrop-blur-xs"
+            onClick={() => setMobileOutlineOpen(false)}
+          />
+          <div className="relative w-72 max-w-[80vw] bg-surface h-full shadow-xl flex flex-col z-10 border-r border-line animate-fade-in">
+            <div className="p-3.5 border-b border-line flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-2">
+                <BookOpen size={14} className="text-ink-mute" />
+                <span className="font-semibold text-xs text-ink">Sections Outline</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-subtle text-ink-mute">
+                  {headings.length}
+                </span>
               </div>
+              <button
+                type="button"
+                onClick={() => setMobileOutlineOpen(false)}
+                className="p-1 rounded text-ink-mute hover:text-ink hover:bg-surface-subtle"
+                aria-label="Close sections outline"
+              >
+                <X size={15} />
+              </button>
             </div>
 
-            <nav className="flex-1 overflow-y-auto p-3 space-y-1 text-xs">
-              {headings.map((h, idx) => (
-                <button
-                  key={`${h.id}-${idx}`}
-                  type="button"
-                  onClick={() => scrollToHeading(h.id)}
-                  className={`w-full text-left truncate rounded px-2.5 py-1.5 transition-colors ${
-                    activeHeadingId === h.id
-                      ? 'bg-surface-subtle font-semibold text-ink'
-                      : 'text-ink-soft hover:text-ink hover:bg-surface-subtle'
-                  } ${h.level === 1 ? 'font-medium' : h.level === 2 ? 'pl-4 text-ink-mute' : 'pl-6 text-ink-mute'}`}
-                >
-                  {h.text}
-                </button>
-              ))}
+            <nav className="flex-1 overflow-y-auto p-2 space-y-1 text-xs">
+              <button
+                type="button"
+                onClick={() => {
+                  scrollToTop();
+                  setMobileOutlineOpen(false);
+                }}
+                className={`w-full text-left truncate rounded px-2.5 py-2 font-semibold transition-colors ${
+                  activeHeadingId === 'top' || !activeHeadingId
+                    ? 'bg-surface-subtle text-ink border-l-2 border-ink'
+                    : 'text-ink-soft hover:bg-surface-subtle'
+                }`}
+              >
+                Top (Title & Abstract)
+              </button>
+              {headings.map((h, idx) => {
+                const isActive = activeHeadingId === h.id;
+                return (
+                  <button
+                    key={`mobile-${h.id}-${idx}`}
+                    type="button"
+                    onClick={() => {
+                      scrollToHeading(h.id);
+                      setMobileOutlineOpen(false);
+                    }}
+                    className={`w-full text-left truncate rounded transition-colors block ${
+                      isActive
+                        ? 'bg-surface-subtle font-semibold text-ink border-l-2 border-ink'
+                        : 'text-ink-soft hover:bg-surface-subtle'
+                    } ${
+                      h.level === 1 ? 'py-1.5 font-semibold pl-2.5' : h.level === 2 ? 'py-1 pl-4' : 'py-0.5 pl-6 text-ink-mute'
+                    }`}
+                  >
+                    {h.text}
+                  </button>
+                );
+              })}
             </nav>
-          </aside>
-        )}
-      </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -49,9 +49,9 @@ const PAPER_TYPES = [
 ] as const;
 
 const DEPTHS: Array<{ value: Depth; label: string; icon: typeof Zap; specs: string; est: string }> = [
-  { value: 'quick',    label: 'Quick Synthesis',   icon: Zap,        specs: '8–10 papers · 0 debate rounds', est: '~5–7 min' },
-  { value: 'standard', label: 'Standard Review',   icon: BookOpen,   specs: '12–15 papers · 1 debate round', est: '~8–11 min' },
-  { value: 'deep',     label: 'Deep Deliberation', icon: Microscope, specs: '15–20 papers · 2 debate rounds', est: '~12–16 min' },
+  { value: 'quick',    label: 'Quick Synthesis',   icon: Zap,        specs: '8–10 papers · 0 debate rounds', est: '~3–5 min' },
+  { value: 'standard', label: 'Standard Review',   icon: BookOpen,   specs: '12–15 papers · 1 debate round', est: '~6–8 min' },
+  { value: 'deep',     label: 'Deep Deliberation', icon: Microscope, specs: '15–20 papers · 2 debate rounds', est: '~10–14 min' },
 ];
 
 const EXAMPLE_TOPICS = [
@@ -123,6 +123,7 @@ export default function App() {
         strict_mode: true,
         max_debate_rounds: depth === 'deep' ? 2 : depth === 'standard' ? 1 : 0,
         paper_format: paperFormat,
+        paper_type: paperType,
         depth,
       });
       setCurrentSessionId(result.session_id);

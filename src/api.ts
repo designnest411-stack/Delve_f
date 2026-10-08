@@ -33,6 +33,7 @@ export const api = {
     max_debate_rounds?: number;
     strict_mode?: boolean;
     paper_format?: string;
+    paper_type?: string;
     depth?: 'quick' | 'standard' | 'deep';
     year_from?: number;
     include_sources?: string[];
