@@ -69,11 +69,18 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement('a');
       anchor.href = url;
-      anchor.download = 'research-paper.pdf';
+      const cleanTitle = (paper?.topic || headings[0]?.text || 'research-paper')
+        .replace(/[^a-zA-Z0-9_-]/g, '_')
+        .replace(/_+/g, '_')
+        .slice(0, 48);
+      anchor.download = `${cleanTitle}.pdf`;
       document.body.appendChild(anchor);
       anchor.click();
       anchor.remove();
       URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('PDF export failed:', err);
+      alert(err instanceof Error ? err.message : 'Failed to export PDF');
     } finally {
       setDownloading(false);
     }

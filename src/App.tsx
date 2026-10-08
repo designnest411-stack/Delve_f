@@ -29,9 +29,9 @@ const PAPER_FORMATS = [
 ] as const;
 
 const DEPTHS: Array<{ value: Depth; label: string; desc: string }> = [
-  { value: 'quick',    label: '⚡ Quick',    desc: '~2–3 min, 10 agent calls' },
-  { value: 'standard', label: '📚 Standard', desc: '~4–6 min, 16 agent calls' },
-  { value: 'deep',     label: '🔬 Deep',     desc: '~7–10 min, 24 agent calls' },
+  { value: 'quick',    label: '⚡ Quick',    desc: '~5–7 min, 8–10 papers, 0 debate rounds' },
+  { value: 'standard', label: '📚 Standard', desc: '~8–11 min, 12–15 papers, 1 debate round' },
+  { value: 'deep',     label: '🔬 Deep',     desc: '~12–16 min, 15–20 papers, 2 debate rounds' },
 ];
 
 const EXAMPLE_TOPICS = [
