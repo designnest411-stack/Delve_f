@@ -303,7 +303,7 @@ export default function App() {
 
             <div className="flex shrink-0 items-center gap-2">
               {/* Status Indicator */}
-              <div className="hidden sm:inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded border border-line bg-surface-subtle">
+              <div className="hidden sm:inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded border border-line bg-surface-subtle">
                 <span
                   className={`status-dot ${
                     effectiveComplete
@@ -317,7 +317,7 @@ export default function App() {
                       : 'bg-ink-mute'
                   }`}
                 />
-                <span className="font-mono text-[11px] font-medium text-ink-soft">
+                <span className="font-mono text-xs font-medium text-ink-soft">
                   {effectiveComplete
                     ? 'Complete'
                     : isError
@@ -334,7 +334,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="control-button text-xs"
+                  className="control-button text-xs font-medium"
                 >
                   <Square size={12} /> <span className="hidden sm:inline">Stop</span>
                 </button>
@@ -343,7 +343,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={handleRetry}
-                  className="control-button control-button-primary text-xs"
+                  className="control-button control-button-primary text-xs font-medium"
                 >
                   <RotateCcw size={12} /> <span className="hidden sm:inline">Retry</span>
                 </button>
@@ -351,20 +351,13 @@ export default function App() {
               <button
                 type="button"
                 onClick={handleNewSession}
-                className="control-button text-xs"
+                className="control-button text-xs font-medium"
               >
-                <Plus size={13} />
+                <Plus size={14} />
                 <span className="hidden sm:inline">New Run</span>
               </button>
             </div>
           </div>
-
-          {/* Connection warning */}
-          {(isPollingFallback || warning) && (
-            <div className="px-4 py-1 text-center text-xs bg-warn-subtle text-warn border-t border-amber-200">
-              {warning || 'Live updates reconnecting — utilizing background polling.'}
-            </div>
-          )}
         </header>
 
         {/* ── Content View ── */}
@@ -377,10 +370,10 @@ export default function App() {
                   {/* Lead Heading */}
                   <div className="mb-6">
                     <p className="mono-kicker text-xs mb-1.5">New Autonomous Research Run</p>
-                    <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-ink tracking-tight">
                       Synthesize Academic Literature & Draft Manuscripts
                     </h1>
-                    <p className="mt-2 text-xs sm:text-sm text-ink-soft leading-relaxed max-w-2xl">
+                    <p className="mt-2.5 text-sm sm:text-base text-ink-soft leading-relaxed max-w-2xl">
                       Enter any academic research query. Eight autonomous agents will query repositories,
                       synthesize literature, conduct peer debate, and assemble a publication-grade manuscript.
                     </p>
@@ -388,7 +381,7 @@ export default function App() {
 
                   {/* Topic Input Box */}
                   <div className="card p-5 sm:p-6 mb-4">
-                    <label htmlFor="topic" className="block text-xs font-semibold text-ink-soft mb-2">
+                    <label htmlFor="topic" className="block text-sm font-semibold text-ink mb-2">
                       Research topic or working hypothesis
                     </label>
                     <div className="flex flex-col gap-2.5 sm:flex-row">
@@ -400,21 +393,21 @@ export default function App() {
                         onChange={(e) => setTopic(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleStart()}
                         placeholder="e.g. Vision transformers for medical image segmentation"
-                        className="research-input flex-1 min-h-[42px] text-sm"
+                        className="research-input flex-1 min-h-[46px] text-[15px]"
                       />
                       <button
                         type="button"
                         onClick={handleStart}
                         disabled={isStarting || !topic.trim()}
-                        className="control-button control-button-primary disabled:opacity-50 shrink-0"
-                        style={{ minHeight: 42, padding: '0 1.25rem' }}
+                        className="control-button control-button-primary disabled:opacity-50 shrink-0 font-medium"
+                        style={{ minHeight: 46, padding: '0 1.5rem', fontSize: '14px' }}
                       >
                         {isStarting ? (
                           <span className="loading-dots"><span/><span/><span/></span>
                         ) : (
                           <>
                             <span>Start Research</span>
-                            <ArrowRight size={14} />
+                            <ArrowRight size={15} />
                           </>
                         )}
                       </button>
@@ -427,15 +420,15 @@ export default function App() {
                     )}
 
                     {/* Example Topic Prompts */}
-                    <div className="mt-3.5 flex flex-wrap items-center gap-1.5">
-                      <span className="text-[11px] text-ink-mute mr-1">Suggested topics:</span>
+                    <div className="mt-4 flex flex-wrap items-center gap-1.5">
+                      <span className="text-xs text-ink-mute mr-1">Suggested topics:</span>
                       {EXAMPLE_TOPICS.map((ex) => (
                         <button
                           key={ex}
                           type="button"
                           onClick={() => setTopic(ex)}
-                          className="control-button text-[11px] py-1 px-2.5"
-                          style={{ minHeight: 26 }}
+                          className="control-button text-xs py-1.5 px-3"
+                          style={{ minHeight: 28 }}
                         >
                           {ex}
                         </button>
@@ -447,8 +440,8 @@ export default function App() {
                   <div className="card p-5 sm:p-6 space-y-6">
                     <div className="flex items-center justify-between border-b border-line pb-3">
                       <div>
-                        <h2 className="mono-kicker text-[11px]">Execution Configuration</h2>
-                        <p className="text-xs text-ink-soft mt-0.5">
+                        <h2 className="mono-kicker text-xs">Execution Configuration</h2>
+                        <p className="text-sm font-medium text-ink-soft mt-0.5">
                           {depth.toUpperCase()} Mode · {paperFormat.toUpperCase()} Format
                         </p>
                       </div>
@@ -457,7 +450,7 @@ export default function App() {
 
                     {/* Depth Selection */}
                     <div>
-                      <p className="block text-xs font-semibold text-ink-soft mb-2">
+                      <p className="block text-sm font-semibold text-ink mb-2">
                         Research Depth & Deliberation Rounds
                       </p>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -469,19 +462,19 @@ export default function App() {
                               key={item.value}
                               type="button"
                               onClick={() => setDepth(item.value)}
-                              className={`rounded-md border p-3 text-left transition-colors ${
+                              className={`rounded-md border p-3.5 text-left transition-colors ${
                                 selected
                                   ? 'bg-surface-subtle border-ink text-ink shadow-xs'
                                   : 'bg-surface border-line text-ink-soft hover:border-line-strong'
                               }`}
                               aria-pressed={selected}
                             >
-                              <div className="flex items-center gap-1.5 mb-1 text-ink">
-                                <Icon size={14} />
-                                <span className="font-semibold text-xs">{item.label}</span>
+                              <div className="flex items-center gap-1.5 mb-1.5 text-ink">
+                                <Icon size={15} />
+                                <span className="font-semibold text-sm">{item.label}</span>
                               </div>
-                              <div className="text-[11px] text-ink-mute leading-snug">{item.specs}</div>
-                              <div className="text-[10px] text-ink-faint font-mono mt-1">{item.est}</div>
+                              <div className="text-xs text-ink-mute leading-snug">{item.specs}</div>
+                              <div className="text-xs text-ink-mute font-mono mt-1.5">{item.est}</div>
                             </button>
                           );
                         })}
@@ -490,7 +483,7 @@ export default function App() {
 
                     {/* Citation Format Selection */}
                     <div>
-                      <p className="block text-xs font-semibold text-ink-soft mb-2">
+                      <p className="block text-sm font-semibold text-ink mb-2">
                         Manuscript Citation Standard
                       </p>
                       <div className="flex flex-wrap gap-1.5">
@@ -501,7 +494,7 @@ export default function App() {
                               key={item.value}
                               type="button"
                               onClick={() => setPaperFormat(item.value)}
-                              className={`rounded px-3 py-1.5 text-xs font-medium transition-colors border ${
+                              className={`rounded px-3.5 py-1.5 text-xs font-semibold transition-colors border ${
                                 selected
                                   ? 'bg-ink text-white border-ink'
                                   : 'bg-surface border-line text-ink-soft hover:bg-surface-subtle'
@@ -515,10 +508,10 @@ export default function App() {
                       </div>
                     </div>
 
-                    {/* Custom PDF Grounding */}
+                    {/* Custom PDF References */}
                     <div>
-                      <p className="block text-xs font-semibold text-ink-soft mb-2">
-                        Private PDF References (Optional pgvector RAG Grounding)
+                      <p className="block text-sm font-semibold text-ink mb-2">
+                        Reference PDF Documents (Optional)
                       </p>
                       <PdfUpload onFilesChange={setUploadedFileIds} />
                     </div>
@@ -556,13 +549,13 @@ export default function App() {
                       <button
                         key={key}
                         onClick={() => setRightTab(key)}
-                        className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 -mb-px transition-colors ${
+                        className={`flex items-center gap-2 px-4 py-2.5 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
                           active
                             ? 'border-ink text-ink font-semibold'
                             : 'border-transparent text-ink-mute hover:text-ink hover:border-line-strong'
                         }`}
                       >
-                        <Icon size={13} className={active ? 'text-ink' : 'text-ink-mute'} />
+                        <Icon size={14} className={active ? 'text-ink' : 'text-ink-mute'} />
                         <span className="hidden sm:inline">{fullLabel}</span>
                         <span className="sm:hidden">{label}</span>
                       </button>

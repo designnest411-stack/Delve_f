@@ -202,7 +202,7 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
             {paper.verified_citations ?? paper.bibliography?.length ?? 0} Citations Verified
           </span>
           <span className="badge badge-green">
-            Peer-Debated ({paper.debate_rounds ?? 2} Rounds)
+            Peer-Reviewed ({paper.debate_rounds ?? 2} Rounds)
           </span>
         </div>
 
@@ -210,7 +210,7 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
           <button 
             type="button" 
             onClick={handleCopy} 
-            className="control-button text-xs"
+            className="control-button text-[13px]"
           >
             {copied ? <Check className="h-3.5 w-3.5 text-ok" /> : <Copy className="h-3.5 w-3.5" />}
             <span>{copied ? 'Copied' : 'Copy Markdown'}</span>
@@ -218,7 +218,7 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
           <button 
             type="button" 
             onClick={handleDownloadPdf} 
-            className="control-button control-button-primary text-xs"
+            className="control-button control-button-primary text-[13px]"
           >
             <Download className="h-3.5 w-3.5" />
             <span>{downloading ? 'Exporting PDF…' : 'Download PDF'}</span>
@@ -253,17 +253,17 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
           <aside
             className="w-64 shrink-0 border-l border-line overflow-hidden hidden xl:flex flex-col bg-surface"
           >
-            <div className="flex items-center justify-between gap-1.5 px-3 py-2.5 border-b border-line shrink-0">
+            <div className="flex items-center justify-between gap-1.5 px-3.5 py-2.5 border-b border-line shrink-0">
               <div className="flex items-center gap-1.5">
-                <BookOpen size={12} className="text-ink-mute" />
-                <span className="mono-kicker text-[10px]">Sections</span>
+                <BookOpen size={13} className="text-ink-mute" />
+                <span className="mono-kicker text-xs">Sections</span>
               </div>
               <button
                 type="button"
                 onClick={scrollToTop}
-                className="text-[11px] text-ink-mute hover:text-ink flex items-center gap-0.5"
+                className="text-xs text-ink-mute hover:text-ink flex items-center gap-0.5"
               >
-                <ArrowUp size={10} /> Top
+                <ArrowUp size={11} /> Top
               </button>
             </div>
 
@@ -274,7 +274,7 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
                   <button
                     key={h.id}
                     onClick={() => scrollToHeading(h.id)}
-                    className={`block text-left text-xs leading-snug rounded px-2 py-1.5 w-full truncate transition-colors ${
+                    className={`block text-left text-[13px] leading-snug rounded px-2.5 py-1.5 w-full truncate transition-colors ${
                       isSelected
                         ? 'bg-surface-subtle text-ink font-semibold'
                         : 'text-ink-mute hover:text-ink hover:bg-surface-subtle'

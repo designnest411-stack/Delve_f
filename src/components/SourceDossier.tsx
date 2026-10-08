@@ -26,8 +26,8 @@ function formatSourceName(source: string): string {
     semantic_scholar: 'Semantic Scholar',
     semanticscholar: 'Semantic Scholar',
     github: 'GitHub',
-    custom_pdf: 'Custom PDF',
-    vector_store: 'Document Store',
+    custom_pdf: 'Reference PDF',
+    vector_store: 'Uploaded Documents',
   };
   const key = source.trim().toLowerCase();
   if (map[key]) return map[key];
@@ -151,28 +151,28 @@ export function SourceDossier({ paper }: SourceDossierProps) {
 
       {/* ── Metric Summary Row ── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="card p-3.5">
-          <span className="mono-kicker text-[10px]">Total Cited</span>
-          <div className="text-xl font-bold font-mono text-ink mt-0.5">{totalSourcesCount}</div>
-          <div className="text-[11px] text-ink-mute">Primary literature</div>
+        <div className="card p-4">
+          <span className="mono-kicker text-xs">Total Cited</span>
+          <div className="text-2xl font-bold font-mono text-ink mt-1">{totalSourcesCount}</div>
+          <div className="text-xs text-ink-mute mt-0.5">Primary literature</div>
         </div>
 
-        <div className="card p-3.5">
-          <span className="mono-kicker text-[10px]">Verified DOIs</span>
-          <div className="text-xl font-bold font-mono text-ok mt-0.5">{verifiedCount} / {totalSourcesCount}</div>
-          <div className="text-[11px] text-ink-mute">Deterministic resolution</div>
+        <div className="card p-4">
+          <span className="mono-kicker text-xs">Verified Citations</span>
+          <div className="text-2xl font-bold font-mono text-ok mt-1">{verifiedCount} / {totalSourcesCount}</div>
+          <div className="text-xs text-ink-mute mt-0.5">Matched to primary papers</div>
         </div>
 
-        <div className="card p-3.5">
-          <span className="mono-kicker text-[10px]">Repositories</span>
-          <div className="text-xl font-bold font-mono text-ink mt-0.5">{availableSources.length}</div>
-          <div className="text-[11px] text-ink-mute">Academic indexes</div>
+        <div className="card p-4">
+          <span className="mono-kicker text-xs">Academic Sources</span>
+          <div className="text-2xl font-bold font-mono text-ink mt-1">{availableSources.length}</div>
+          <div className="text-xs text-ink-mute mt-0.5">Active research channels</div>
         </div>
 
-        <div className="card p-3.5">
-          <span className="mono-kicker text-[10px]">Claims Mapped</span>
-          <div className="text-xl font-bold font-mono text-ink mt-0.5">{claimEvidenceMap.length}</div>
-          <div className="text-[11px] text-ink-mute">Grounded statements</div>
+        <div className="card p-4">
+          <span className="mono-kicker text-xs">Evidence Links</span>
+          <div className="text-2xl font-bold font-mono text-ink mt-1">{claimEvidenceMap.length}</div>
+          <div className="text-xs text-ink-mute mt-0.5">Grounded manuscript claims</div>
         </div>
       </div>
 

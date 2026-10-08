@@ -59,16 +59,16 @@ function StatCard({ icon: Icon, label, value, sub }: {
   icon: React.ElementType; label: string; value: string | number; sub?: string;
 }) {
   return (
-    <div className="card p-4 flex flex-col justify-between gap-2">
+    <div className="card p-4 flex flex-col justify-between gap-2.5">
       <div className="flex items-center gap-2 text-ink-mute">
-        <Icon size={14} className="text-ink-soft shrink-0" />
-        <span className="mono-kicker text-[10px] truncate">
+        <Icon size={15} className="text-ink-soft shrink-0" />
+        <span className="mono-kicker text-xs truncate">
           {label}
         </span>
       </div>
       <div>
-        <div className="text-xl sm:text-2xl font-bold font-mono text-ink">{value}</div>
-        {sub && <div className="text-[11px] text-ink-mute mt-0.5">{sub}</div>}
+        <div className="text-2xl sm:text-3xl font-bold font-mono text-ink tracking-tight">{value}</div>
+        {sub && <div className="text-xs text-ink-mute mt-1">{sub}</div>}
       </div>
     </div>
   );
@@ -97,11 +97,11 @@ export function SessionStats({ detail, paper }: SessionStatsProps) {
     <div className="space-y-6">
       {/* ── Header ── */}
       <div className="border-b border-line pb-4">
-        <span className="mono-kicker text-[10px]">Session Analytics & Provenance</span>
-        <h2 className="text-xl font-bold text-ink mt-0.5">
+        <span className="mono-kicker text-xs">Session Analytics & Provenance</span>
+        <h2 className="text-xl sm:text-2xl font-bold text-ink mt-1">
           {detail.topic}
         </h2>
-        <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+        <div className="flex items-center gap-2 mt-2.5 flex-wrap">
           {detail.status === 'complete' && (
             <span className="badge badge-green">Research Complete</span>
           )}
@@ -115,7 +115,7 @@ export function SessionStats({ detail, paper }: SessionStatsProps) {
       </div>
 
       {/* ── Primary Metrics ── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
         <StatCard
           icon={Clock}
           label="Execution Time"
@@ -124,9 +124,9 @@ export function SessionStats({ detail, paper }: SessionStatsProps) {
         />
         <StatCard
           icon={Hash}
-          label="Tokens Processed"
+          label="Content Analyzed"
           value={tokenEstimate.toLocaleString()}
-          sub="Gemini engine total"
+          sub="words and passages"
         />
         <StatCard
           icon={Database}
@@ -142,7 +142,7 @@ export function SessionStats({ detail, paper }: SessionStatsProps) {
         />
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
         <StatCard
           icon={ShieldCheck}
           label="Citations Verified"
@@ -163,9 +163,9 @@ export function SessionStats({ detail, paper }: SessionStatsProps) {
         />
         <StatCard
           icon={BookOpen}
-          label="Grounding PDFs"
+          label="Reference Papers"
           value={detail.uploaded_paper_ids?.length ?? 0}
-          sub="custom vector documents"
+          sub="custom uploaded files"
         />
       </div>
 

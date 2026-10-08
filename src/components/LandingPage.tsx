@@ -51,20 +51,20 @@ const PLATFORM_CAPABILITIES = [
   },
   {
     icon: Zap,
-    title: 'Real-Time Deliberation Telemetry',
-    desc: 'Observe agent reasoning, claim validation, search queries, and debate arguments via an interactive WebSocket telemetry stream.',
+    title: 'Live Deliberation Stream',
+    desc: 'Observe agent reasoning, claim validation, search queries, and debate arguments live as the synthesis progresses.',
   },
   {
     icon: FileText,
-    title: 'Custom PDF Vector Grounding',
-    desc: 'Upload unpublished manuscripts or private documentation to index dense embeddings into pgvector for specialized RAG synthesis.',
+    title: 'Reference Paper Synthesis',
+    desc: 'Upload unpublished manuscripts or private documentation to ground synthesis directly in your source files.',
   },
 ];
 
 const ARCHITECTURE_METRICS = [
-  { value: '8', label: 'Autonomous Agents', sub: 'Specialized state graph nodes' },
-  { value: '6', label: 'Academic Indexes', sub: 'Direct API integrations' },
-  { value: '100%', label: 'Deterministic Citations', sub: 'Verified DOI resolution' },
+  { value: '8', label: 'Autonomous Agents', sub: 'Collaborative research pipeline' },
+  { value: '6', label: 'Academic Indexes', sub: 'Live repository connections' },
+  { value: '100%', label: 'Verified Citations', sub: 'Direct DOI cross-referencing' },
   { value: '4+', label: 'Publication Standards', sub: 'IEEE, ACM, APA, MLA formats' },
 ];
 
@@ -158,13 +158,13 @@ export function LandingPage({ onSignIn }: LandingPageProps) {
         <section id="pipeline" className="px-4 sm:px-8 py-20 border-t bg-surface" style={{ borderColor: 'var(--color-line)' }}>
           <div className="max-w-6xl mx-auto">
             <div className="max-w-2xl mb-12">
-              <p className="mono-kicker text-xs mb-2">State Graph Orchestration</p>
+              <p className="mono-kicker text-xs mb-2">Autonomous Workflow</p>
               <h2 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">
                 The 8-Agent Deliberation Pipeline
               </h2>
-              <p className="mt-2 text-sm text-ink-soft leading-relaxed">
-                Rather than generating text through a single prompt pass, the system executes an autonomous state graph.
-                Each phase operates with discrete validation gates and structured evidence passing.
+              <p className="mt-2 text-sm sm:text-base text-ink-soft leading-relaxed">
+                Rather than generating text in a single pass, the system executes a collaborative multi-agent pipeline.
+                Each phase reviews, critiques, and refines evidence before the final manuscript is authored.
               </p>
             </div>
 
@@ -181,16 +181,16 @@ export function LandingPage({ onSignIn }: LandingPageProps) {
                         <span className="font-mono text-xs font-semibold text-ink-mute">Phase {node.phase}</span>
                         <Icon size={16} className="text-ink-soft" />
                       </div>
-                      <h3 className="font-semibold text-sm text-ink mb-1.5">
+                      <h3 className="font-semibold text-sm sm:text-base text-ink mb-1.5">
                         {node.title}
                       </h3>
-                      <p className="text-xs text-ink-mute leading-relaxed">
+                      <p className="text-xs sm:text-[13px] text-ink-mute leading-relaxed">
                         {node.role}
                       </p>
                     </div>
-                    <div className="mt-4 pt-3 border-t flex items-center justify-between text-[11px] text-ink-mute" style={{ borderColor: 'var(--color-line)' }}>
-                      <span>Agent Node</span>
-                      <span className="font-mono text-[10px] text-ok font-medium">VERIFIED</span>
+                    <div className="mt-4 pt-3 border-t flex items-center justify-between text-xs text-ink-mute" style={{ borderColor: 'var(--color-line)' }}>
+                      <span>Research Phase</span>
+                      <span className="font-mono text-[11px] text-ink-soft font-medium">Ready</span>
                     </div>
                   </div>
                 );

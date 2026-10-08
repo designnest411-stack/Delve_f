@@ -84,29 +84,29 @@ export function Sidebar({ currentSessionId, onSelectSession, onNewSession }: Sid
       {/* ── Brand & Action Header ── */}
       <div className="p-4 border-b border-line">
         <div className="flex items-center gap-2.5 mb-3.5">
-          <div className="w-7 h-7 rounded-md bg-primary text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
-            <Brain size={15} />
+          <div className="w-8 h-8 rounded-md bg-primary text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+            <Brain size={16} />
           </div>
           <div className="min-w-0">
             <div className="font-semibold text-sm leading-none text-ink truncate">ResearchAgent</div>
-            <div className="text-[11px] text-ink-mute mt-1 truncate">Autonomous Deep Research</div>
+            <div className="text-xs text-ink-mute mt-1 truncate">Autonomous Deep Research</div>
           </div>
         </div>
 
         <button
           type="button"
           onClick={onNewSession}
-          className="control-button control-button-primary w-full text-xs"
-          style={{ minHeight: 34 }}
+          className="control-button control-button-primary w-full text-sm font-medium"
+          style={{ minHeight: 36 }}
         >
-          <Plus size={14} />
+          <Plus size={15} />
           <span>New Research</span>
         </button>
 
         {quota && (
           <div className="mt-3 flex items-center justify-between text-xs px-2.5 py-1.5 rounded border border-line bg-surface-subtle">
-            <span className="mono-kicker text-[10px]">Plan</span>
-            <span className="font-mono text-[11px] font-medium text-ink-soft">
+            <span className="mono-kicker text-[11px]">Plan</span>
+            <span className="font-mono text-xs font-medium text-ink-soft">
               {quota.unlimited
                 ? `${sessions.length} ${sessions.length === 1 ? 'paper' : 'papers'} · Unlimited`
                 : `${quota.papers_remaining} ${quota.papers_remaining === 1 ? 'paper' : 'papers'} left`}
@@ -124,21 +124,21 @@ export function Sidebar({ currentSessionId, onSelectSession, onNewSession }: Sid
 
       {/* ── Sessions List ── */}
       <div className="flex-1 overflow-y-auto p-2">
-        <div className="px-2 py-1 mb-1">
-          <span className="mono-kicker text-[10px]">Research History</span>
+        <div className="px-2 py-1.5 mb-1">
+          <span className="mono-kicker text-[11px]">Research History</span>
         </div>
 
         {loading && sessions.length === 0 ? (
           <div className="p-2 space-y-1.5">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="shimmer h-10 w-full rounded" />
+              <div key={i} className="shimmer h-11 w-full rounded" />
             ))}
           </div>
         ) : sessions.length === 0 ? (
           <div className="px-3 py-8 text-center">
-            <FolderOpen size={20} className="mx-auto mb-2 text-ink-mute opacity-50" />
-            <p className="text-xs font-medium text-ink-soft">No previous research</p>
-            <p className="mt-0.5 text-[11px] text-ink-mute">Initiated research runs will be cataloged here.</p>
+            <FolderOpen size={22} className="mx-auto mb-2 text-ink-mute opacity-50" />
+            <p className="text-sm font-medium text-ink-soft">No previous research</p>
+            <p className="mt-1 text-xs text-ink-mute">Initiated research runs will be cataloged here.</p>
           </div>
         ) : (
           <nav className="space-y-0.5" aria-label="Past research sessions">
@@ -149,19 +149,19 @@ export function Sidebar({ currentSessionId, onSelectSession, onNewSession }: Sid
                   <div
                     key={session.session_id}
                     onClick={() => onSelectSession(session.session_id)}
-                    className={`group relative flex items-center gap-2.5 rounded px-2.5 py-2 text-xs transition-colors cursor-pointer border ${
+                    className={`group relative flex items-center gap-2.5 rounded px-2.5 py-2 transition-colors cursor-pointer border ${
                       selected
-                        ? 'bg-surface-subtle border-line-strong text-ink font-medium shadow-xs'
+                        ? 'bg-surface-subtle border-line-strong text-ink font-semibold shadow-xs'
                         : 'border-transparent text-ink-soft hover:bg-surface-subtle hover:text-ink'
                     }`}
                   >
                     <StatusIcon status={session.status} />
 
                     <div className="min-w-0 flex-1">
-                      <p className="truncate leading-snug">
+                      <p className="truncate text-[13px] font-medium leading-snug">
                         {session.topic}
                       </p>
-                      <span className="text-[10px] text-ink-mute font-mono block mt-0.5">
+                      <span className="text-xs text-ink-mute font-mono block mt-0.5">
                         {relativeTime(session.updated_at)}
                       </span>
                     </div>
@@ -176,7 +176,7 @@ export function Sidebar({ currentSessionId, onSelectSession, onNewSession }: Sid
                       className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-canvas text-ink-mute hover:text-err disabled:opacity-0"
                       aria-label={`Delete ${session.topic}`}
                     >
-                      <Trash2 size={12} />
+                      <Trash2 size={13} />
                     </button>
                   </div>
                 );
@@ -192,9 +192,9 @@ export function Sidebar({ currentSessionId, onSelectSession, onNewSession }: Sid
           type="button"
           onClick={() => void supabase.auth.signOut()}
           className="control-button control-button-ghost w-full text-xs justify-start"
-          style={{ minHeight: 30 }}
+          style={{ minHeight: 32 }}
         >
-          <LogOut size={13} className="text-ink-mute" />
+          <LogOut size={14} className="text-ink-mute" />
           <span>Sign out</span>
         </button>
       </div>

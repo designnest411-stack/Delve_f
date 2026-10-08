@@ -113,7 +113,7 @@ export function PdfUpload({ onFilesChange }: PdfUploadProps) {
         />
         <Upload className="mx-auto mb-1.5 h-4 w-4 text-ink-mute" />
         <p className="text-xs font-semibold text-ink">Drop reference PDFs here or browse to upload</p>
-        <p className="text-[11px] text-ink-mute mt-0.5">Passages are tokenized and stored in pgvector for direct RAG literature grounding</p>
+        <p className="text-xs text-ink-mute mt-0.5">Uploaded papers will be synthesized and cited directly in your research manuscript</p>
       </div>
 
       {files.length > 0 && (
@@ -128,13 +128,13 @@ export function PdfUpload({ onFilesChange }: PdfUploadProps) {
                 {file.filename}
               </span>
               {file.status === 'uploading' && (
-                <span className="flex items-center gap-1 text-[11px] text-accent">
-                  <Loader2 size={11} className="animate-spin" /> Indexing…
+                <span className="flex items-center gap-1 text-xs text-accent">
+                  <Loader2 size={12} className="animate-spin" /> Processing…
                 </span>
               )}
               {file.status === 'done' && (
-                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-ok">
-                  <Check size={11} /> {file.chunks_stored} passages indexed
+                <span className="inline-flex items-center gap-1 text-xs font-medium text-ok">
+                  <Check size={12} /> {file.chunks_stored} passages ready
                 </span>
               )}
               {file.status === 'error' && (

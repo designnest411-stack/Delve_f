@@ -234,17 +234,17 @@ export function ResearchFeed({
   return (
     <div className="h-full overflow-y-auto px-4 sm:px-6 py-6 sm:py-8">
       <div className="mx-auto max-w-[1000px]">
-        {/* Header telemetry summary */}
+        {/* Header deliberation summary */}
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-line pb-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="mono-kicker text-[10px]">Real-Time Telemetry</span>
+              <span className="mono-kicker text-xs">Autonomous Deliberation</span>
               {!isComplete && !isError && <span className="status-dot status-dot-running" />}
             </div>
             <h1 className="text-xl sm:text-2xl font-bold text-ink">
               {isComplete ? 'Research Generation Complete' : isError ? 'Pipeline Stopped' : PIPELINE_STAGES[activeIndex]?.label || 'Researching'}
             </h1>
-            <p className="mt-1 text-xs text-ink-mute">
+            <p className="mt-1 text-sm text-ink-mute">
               {items.length} events logged · Elapsed:{' '}
               <span className="font-mono text-ink-soft font-semibold">{formatElapsed(elapsedSec)}</span>
             </p>
@@ -252,9 +252,8 @@ export function ResearchFeed({
 
           <div className="flex items-center gap-2">
             <span className="badge">
-              {isComplete ? 'Finished' : isConnected ? 'Live WebSocket' : isPollingFallback ? 'Background Polling' : 'Connecting'}
+              {isComplete ? 'Finished' : (isConnected || isPollingFallback) ? 'Live' : 'Connecting'}
             </span>
-            {warning && <span className="badge badge-warn">{warning}</span>}
           </div>
         </div>
 

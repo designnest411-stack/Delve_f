@@ -83,7 +83,7 @@ export function useWebSocket(sessionId: string | null) {
       ticket = (await api.createWebSocketTicket(sessionId)).ticket;
     } catch {
       setIsPollingFallback(true);
-      setWarning('Live updates unavailable, using polling fallback');
+      setWarning(null);
       return;
     }
     const url = getWebSocketUrl(sessionId, ticket);
@@ -119,7 +119,7 @@ export function useWebSocket(sessionId: string | null) {
             setError(msg.message || 'Unknown error');
           }
         } catch (e) {
-          console.error('Failed to parse WebSocket message:', e);
+          console.error('Failed to parse message:', e);
         }
       };
 
@@ -135,18 +135,18 @@ export function useWebSocket(sessionId: string | null) {
           connectTimeoutRef.current = window.setTimeout(connect, 2000 * reconnectAttempts.current);
         } else if (!completedRef.current) {
           setIsPollingFallback(true);
-          setWarning('Live updates unavailable, using polling fallback');
+          setWarning(null);
         }
       };
 
       ws.onerror = () => {
         if (wsRef.current !== ws) return;
-        setWarning('Live updates unavailable, using polling fallback');
+        setWarning(null);
       };
 
     } catch (e) {
       setIsPollingFallback(true);
-      setWarning('Failed to create live connection, using polling fallback');
+      setWarning(null);
     }
   }, [sessionId, addFeedItem]);
 
