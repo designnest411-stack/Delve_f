@@ -1,10 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import { Check, Copy, Download, FileText, Sparkles, BookOpen, ArrowUp } from 'lucide-react';
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { api } from '../api';
 import type { PaperResult } from '../types';
+import { Figure1Architecture, Figure2Tradeoff } from './ScientificFigures';
 
 interface PaperViewerProps {
   sessionId: string | null;
@@ -110,12 +113,28 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
     h2({ children, ...props }) {
       const text = String(children).replace(/<[^>]*>/g, '');
       const id = text.trim().toLowerCase().replace(/[^\w]+/g, '-');
-      return <h2 id={id} {...props}>{children}</h2>;
+      const isArchSection = /algorithmic mechanics|architectural paradigms/i.test(text);
+      return (
+        <>
+          <h2 id={id} {...props}>{children}</h2>
+          {isArchSection && <Figure1Architecture topic={paper?.topic} />}
+        </>
+      );
     },
     h3({ children, ...props }) {
       const text = String(children).replace(/<[^>]*>/g, '');
       const id = text.trim().toLowerCase().replace(/[^\w]+/g, '-');
       return <h3 id={id} {...props}>{children}</h3>;
+    },
+    table({ children, ...props }) {
+      return (
+        <div className="my-6 space-y-4">
+          <div className="overflow-x-auto rounded-lg border border-line">
+            <table className="w-full text-xs" {...props}>{children}</table>
+          </div>
+          <Figure2Tradeoff />
+        </div>
+      );
     },
     code({ className, children, ...props }) {
       return (
@@ -225,7 +244,11 @@ export function PaperViewer({ sessionId, isComplete, paper: paperProp }: PaperVi
               style={{ background: 'var(--color-surface)' }}
             >
               <article className="paper-body mx-auto w-full">
-                <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm, remarkMath]} 
+                  rehypePlugins={[rehypeKatex]}
+                  components={markdownComponents}
+                >
                   {manuscript}
                 </ReactMarkdown>
               </article>
